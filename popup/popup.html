@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>readeaser</title>
+    <link rel="stylesheet" href="popup.css">
+    <link rel="stylesheet" href="fonts.css">
+    <script type="text/javascript" src="popup.js"></script>
+</head>
+
+<body>
+    <div class="options">
+        <div class="h1">readeaser</div>
+        <h3>
+            <div class="gray">for</div>
+            <p class="weread">weread</p>
+        </h3>
+        <div class="control">
+            <div class="adjust">
+                <div class="option">字体</div>
+                <select name="fonts" id="fonts" class="chose">
+                    <option value="系统字体">系统字体</option>
+                    <option value="TsangerJinKai05" class="TsangerJinKai05">仓耳今楷</option>
+                    <option value="TsangerYunHei" class="TsangerYunHei">仓耳云黑</option>
+                    <option value="SourceHanSerifCN" class="SourceHanSerifCN">思源宋体</option>
+                    <option value="SourceHanSansCN" class="SourceHanSansCN">思源黑体</option>
+                    <option value="FounderShuSong" class="FounderShuSong">方正书宋</option>
+                    <option value="Founderkai" class="Founderkai">方正楷体</option>
+                    <option value="ChillRoundGothic" class="ChillRoundGothic">寒蝉圆黑</option>
+                    <option value="ChillDuanHeiSong" class="ChillDuanHeiSong">寒蝉黑宋</option>
+
+                </select>
+            </div>
+            <div class="adjust">
+                <div class="option">大小</div>
+                <input type="range" class="chose">
+            </div>
+            <div class="adjust">
+                <div class="option">边距</div>
+                <input type="range" class="chose">
+            </div>
+            <div class="adjust">
+                <div class="option">行距</div>
+                <input type="range" class="chose">
+            </div>
+            <div class="adjust">
+                <div class="option">背景</div>
+                <fieldset class="chose">
+                    <label for="color1"></label>
+                    <input type="radio" id="color1" name="bg-color" value="white" checked>
+
+                    <label for="color2"></label>
+                    <input type="radio" id="color2" name="bg-color" value="yellow">
+
+                    <label for="color3"></label>
+                    <input type="radio" id="color3" name="bg-color" value="green">
+
+                    <label for="color4"></label>
+                    <input type="radio" id="color4" name="bg-color" value="black">
+
+                </fieldset>
+            </div>
+            <div class="adjust">
+                <div class="option">自动阅读</div>
+                <input type="range" class="chose">
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

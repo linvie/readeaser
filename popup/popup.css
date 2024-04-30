@@ -1,0 +1,204 @@
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #F2F2F2;
+}
+
+.options {
+    display:flex;
+    flex: 0;
+    justify-content: flex-start;
+    flex-direction: column;
+    width: 335px;
+    height: 400px;
+    border-radius: 10px;
+    background: #FEFEFE;
+}
+
+.h1 {
+    margin: 11px 117px 0 auto;
+    width: 102px;
+    height: 25px;
+    flex-shrink: 0;
+    color: #000;
+    font-family: "SourceHanSansCN";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+h3 {
+    margin: 0 24px 0 auto;
+    width: 77px;
+    height: 17px;
+    flex-shrink: 0;
+    color: #000;
+    font-family: "SourceHanSerifCN";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.gray {
+    display: inline;
+    color: #958C8C;
+}
+
+.weread {
+    display: inline;
+}
+
+.control {
+    margin: 5px 0 0 0;
+}
+
+.adjust {
+    margin: 13px 0 0 0;
+    display:flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.option {
+    margin: 0 auto 0 51px;
+    display: flex;
+    width: 65px;
+    height: 29px;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 5px;
+    background: #F2F2F2;
+    flex-shrink: 0;
+    color: #000;
+    text-align: center;
+    font-family: "SourceHanSerifCN";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.chose {
+    border: none;
+    margin: 0;
+    padding: 0;
+    margin: 0 36px 0 auto;
+    width: 150px;
+    height: 20px;
+    flex-shrink: 0;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+   
+}
+select {
+    background:#F2F2F2;
+    border-radius:10px;
+}
+select:hover {
+    background-color: #e8e8e8;
+  }
+
+.TsangerYunHei {
+    font-family:"TsangerYunHei";
+}
+
+.TsangerJinKai05 {
+    font-family: "TsangerJinKai05";
+}
+
+.ChillDuanHeiSong {
+    font-family: "ChillDuanHeiSong";
+}
+
+.FounderShuSong {
+    font-family: "FounderShuSong";
+}
+
+.ChillRoundGothic {
+    font-family: "ChillRoundGothic";
+}
+
+.SourceHanSerifCN {
+    font-family: "SourceHanSerifCN";
+}
+
+.SourceHanSansCN {
+    font-family: "SourceHanSansCN";
+}
+
+.Founderkai {
+    font-family: "Founderkai";
+}
+
+
+input[type="radio"] {
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    position: relative;
+  }
+
+input[type="radio"]:before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    position: absolute;
+    top: -11px;
+    left: -11px;
+    opacity: 0; 
+    transition: opacity 0.2s; 
+  }
+  
+  
+input[type="radio"]:checked:before {
+    opacity: 1; 
+  }
+  
+  
+#color1 {
+    border: 10px solid #FFF; 
+
+}
+
+#color1:before{
+    border: 1px solid #4186E6; 
+}
+
+#color2 {
+    margin: 0 11px 0 22px;
+    border: 10px solid #F6F2E1;
+}
+
+#color2:before{
+    border: 1px solid #A67B3A; 
+}
+
+#color3 {
+    margin: 0 22px 0 11px;
+    border: 10px solid #D3EFD1;
+}
+
+#color3:before{
+    border: 1px solid #509530; 
+}
+
+#color4 {
+    border: 10px solid #222831;
+}
+
+#color4:before{
+    border: 1px solid #4186E6; 
+}
+

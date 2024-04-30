@@ -1,0 +1,32 @@
+@font-face {
+    font-family: "TsangerJinKai05";
+    src: url("chrome-extension://__MSG_@@extension_id__/fonts/TsangerJinKai05.ttf");
+}
+@font-face {
+    font-family: "TsangerYunHei";
+    src: url("chrome-extension://__MSG_@@extension_id__/fonts/TsangerYunHei.ttf");
+}
+@font-face {
+    font-family: "SourceHanSerifCN";
+    src: url("chrome-extension://__MSG_@@extension_id__/fonts/SourceHanSerifCN.otf");
+}
+@font-face {
+    font-family: "SourceHanSansCN";
+    src: url("chrome-extension://__MSG_@@extension_id__/fonts/SourceHanSansCN.otf");
+}
+@font-face {
+    font-family: "FounderShuSong";
+    src: url("chrome-extension://__MSG_@@extension_id__/fonts/FounderShuSong.ttf");
+}
+@font-face {
+    font-family: "Founderkai";
+    src: url("chrome-extension://__MSG_@@extension_id__/fonts/Founderkai.ttf");
+}
+@font-face {
+    font-family: "ChillRoundGothic";
+    src: url("chrome-extension://__MSG_@@extension_id__/fonts/ChillRoundGothic.ttf");
+}
+@font-face {
+    font-family: "ChillDuanHeiSong";
+    src: url("chrome-extension://__MSG_@@extension_id__/fonts/ChillDuanHeiSong.otf");
+}
