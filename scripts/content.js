@@ -39,6 +39,47 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    function injectColorCss(color, bgcolor, fontColor) {
+        const style = document.createElement('style');
+        style.id = 'bgcolorSetting';
+        style.innerHTML = `
+        .wr_whiteTheme {background-color: ${bgcolor} !important;}
+        .wr_whiteTheme .app_content,
+        .wr_whiteTheme .readerTopBar,
+        .wr_whiteTheme .readerControls_item {background-color: ${color} !important;}
+        .readerChapterContent {color: ${fontColor} !important;}
+        `
+        document.head.appendChild(style);
+    }
+
+    function changeColor(color, bgcolor) {
+        if (color === 'white') {
+            if (bgcolor) {
+                bgcolor.parentNode.removeChild(bgcolor);
+            }
+            document.body.classList.add('wr_whiteTheme');
+        } else if (color === 'black') {
+            if (bgcolor) {
+                bgcolor.parentNode.removeChild(bgcolor);
+            }
+            document.body.classList.remove('wr_whiteTheme');
+            injectColorCss(0, 0, "#b2b2b2");
+        } else if (color === "yellow") {
+            if (bgcolor) {
+                bgcolor.parentNode.removeChild(bgcolor);
+            }
+            injectColorCss("#F6F2E1", 0, "##1c1c1d");
+        } else if (color === "green") {
+            if (bgcolor) {
+                bgcolor.parentNode.removeChild(bgcolor);
+            }
+            injectColorCss("#D3EFD1", 0, "##1c1c1d");
+        }
+    }
+
+    const whiteBlack = document.querySelectorAll('button[title="深色"], button[title="浅色"]');
+    whiteBlack[0].style.display = "none";
+
 
 
 
@@ -56,5 +97,18 @@ document.addEventListener('DOMContentLoaded', function () {
         changeFontFamily(fontFamily, fontFamilySetting);
         activeSetting();
     });
+
+    chrome.storage.local.get(["weread-bgcolor"])
+        .then((res) => {
+            const color = res["weread-bgcolor"];
+            const bgcolor = document.getElementById('bgcolorSetting');
+            changeColor(color, bgcolor);
+        })
+
+    chrome.runtime.onMessage.addListener(function (message, sender) {
+        const color = message.bgcolor;
+        const bgcolor = document.getElementById('bgcolorSetting');
+        changeColor(color, bgcolor);
+    })
 });
 

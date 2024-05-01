@@ -20,15 +20,28 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 
     //background
-    const radioButton = document.querySelectorAll("input[type='radio'][name='bg=color']");
+    const radioButton = document.querySelectorAll("input[type='radio'][name='bg-color']");
+    chrome.storage.local.get(["weread-bgcolor"])
+        .then((res) => {
+            const color = res['weread-bgcolor'];
+            if (color) {
+                radioButton.forEach((radio) => {
+                    if (radio.value === color) {
+                        radio.checked = true;
+                    }
+                })
+            }
+        })
     radioButton.forEach(radio => {
         radio.addEventListener('change', (e) => {
             if (e.target.checked) {
                 const value = e.target.value;
-                chrome.storage.local.set({ 'weread-bgcolor': value });
+                chrome.storage.local.set({ 'weread-bgcolor': value }).then(() => {
+                    console.log("success!")
+                });
                 chrome.tabs.query({ active: true, currentWindow: true })
                     .then((tabs) => {
-                        chrome.tabs.sendMessage(tabs[0].id, { bgcole: value })
+                        chrome.tabs.sendMessage(tabs[0].id, { bgcolor: value })
                     })
             }
         })
