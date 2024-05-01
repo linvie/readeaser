@@ -25,7 +25,10 @@ document.addEventListener('DOMContentLoaded', function () {
             let maxWidth = window.getComputedStyle(element).maxWidth;
             return parseInt(maxWidth, 10);
         }
-        const reader = document.querySelector(".readerContent .app_content");
+        const rt = readerType();
+        let reader;
+        if (rt === "N") { reader = document.querySelector(".readerContent .app_content"); }
+        else { reader = document.querySelector(".wr_horizontalReader .readerChapterContent"); }
         let currentwith = getCurrentMaxWidth(reader);
         let bool;
         chrome.storage.local.get(['width-bool']).then((b) => {
@@ -39,6 +42,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+
+    function changeFontColor(color) {
+        const targetNodes = document.getElementsByClassName("readerChapterContent");
+        const targetNode = targetNodes[0];
+        targetNode.style.color = color;
+    }
+
     function injectColorCss(color, bgcolor, fontColor) {
         const style = document.createElement('style');
         style.id = 'bgcolorSetting';
@@ -46,10 +56,12 @@ document.addEventListener('DOMContentLoaded', function () {
         .wr_whiteTheme {background-color: ${bgcolor} !important;}
         .wr_whiteTheme .app_content,
         .wr_whiteTheme .readerTopBar,
+        .wr_whiteTheme .readerCatalog,
         .wr_whiteTheme .readerControls_item {background-color: ${color} !important;}
         .readerChapterContent {color: ${fontColor} !important;}
         `
         document.head.appendChild(style);
+        changeFontColor(fontColor);
     }
 
     function changeColor(color, bgcolor) {
@@ -58,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 bgcolor.parentNode.removeChild(bgcolor);
             }
             document.body.classList.add('wr_whiteTheme');
+            injectColorCss(0, 0, "#1c1c1d");
         } else if (color === 'black') {
             if (bgcolor) {
                 bgcolor.parentNode.removeChild(bgcolor);
@@ -69,13 +82,77 @@ document.addEventListener('DOMContentLoaded', function () {
                 bgcolor.parentNode.removeChild(bgcolor);
             }
             document.body.classList.add('wr_whiteTheme');
-            injectColorCss("#F6F2E1", "#FFFDFC", "##1c1c1d");
+            injectColorCss("#F6F2E1", "#FFFDFC", "#1c1c1d");
         } else if (color === "green") {
             if (bgcolor) {
                 bgcolor.parentNode.removeChild(bgcolor);
             }
             document.body.classList.add('wr_whiteTheme');
-            injectColorCss("#D3EFD1", "#E4FBE5", "##1c1c1d");
+            injectColorCss("#D3EFD1", "#E4FBE5", "#1c1c1d");
+        }
+    }
+
+    function injectColorCssHorizontal(color, bgcolor, fontColor) {
+        const style = document.createElement('style');
+        style.id = 'bgcolorSetting';
+        style.innerHTML = `
+        .wr_whiteTheme .readerTopBar,
+        .wr_whiteTheme .wr_horizontalReader .readerChapterContent_container {background-color: ${bgcolor} !important;}
+        .wr_horizontalReader .readerChapterContent,
+        .wr_horizontalReader .readerCatalog,
+        .wr_whiteTheme .readerControls_item {background-color: ${color} !important;}
+        .readerChapterContent {color: ${fontColor} !important;}
+        `
+        document.head.appendChild(style);
+        changeFontColor(fontColor);
+    }
+
+    function changeColorHorizontal(color, bgcolor) {
+        if (color === 'white') {
+            if (bgcolor) {
+                bgcolor.parentNode.removeChild(bgcolor);
+            }
+            document.body.classList.add('wr_whiteTheme');
+            injectColorCssHorizontal(0, 0, "#1c1c1d");
+
+        } else if (color === 'black') {
+            if (bgcolor) {
+                bgcolor.parentNode.removeChild(bgcolor);
+            }
+            document.body.classList.remove('wr_whiteTheme');
+            injectColorCssHorizontal(0, 0, "#b2b2b2");
+        } else if (color === "yellow") {
+            if (bgcolor) {
+                bgcolor.parentNode.removeChild(bgcolor);
+            }
+            document.body.classList.add('wr_whiteTheme');
+            injectColorCssHorizontal("#F6F2E1", "#FFFDFC", "#1c1c1d");
+        } else if (color === "green") {
+            if (bgcolor) {
+                bgcolor.parentNode.removeChild(bgcolor);
+            }
+            document.body.classList.add('wr_whiteTheme');
+            injectColorCssHorizontal("#D3EFD1", "#E4FBE5", "#1c1c1d");
+        }
+    }
+
+    function colorLoad(color) {
+        if (localStorage.getItem('isdark') === 'true') {
+            activeSetting();
+            localStorage.setItem("isdark", "false");
+        }
+        if (color === 'black') {
+            activeSetting();
+            localStorage.setItem('isdark', 'true');
+        }
+    }
+
+    function readerType() {
+        const readerType = document.querySelector("button[class*='readerControls_item']:first-child");
+        if (readerType.classList.contains("isNormalReader")) {
+            return "N";
+        } else {
+            return "H";
         }
     }
 
@@ -96,21 +173,60 @@ document.addEventListener('DOMContentLoaded', function () {
         // console.log("get", message, typeof (message), message.fontFamily)
         const fontFamily = message.fontFamily;
         const fontFamilySetting = document.getElementById('fontFamilySetting');
-        changeFontFamily(fontFamily, fontFamilySetting);
-        activeSetting();
+        if (fontFamily) {
+            changeFontFamily(fontFamily, fontFamilySetting);
+            activeSetting();
+        }
     });
 
-    chrome.storage.local.get(["weread-bgcolor"])
-        .then((res) => {
-            const color = res["weread-bgcolor"];
+    // const targetNodes = document.getElementsByClassName("readerChapterContent");
+    // const targetNode = targetNodes[0];
+    // const config = { attributes: true, attributeFilter: ['style'] };
+    // const callback = function (mutationsList) {
+    //     for (const mutation of mutationsList) {
+    //         if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+    //             const newColor = targetNode.style.color;
+    //             console.log(`color 属性被修改为: ${newColor}`);
+    //             activeSetting();
+    //         }
+    //     }
+    // };
+    // const observer = new MutationObserver(callback);
+
+    localStorage.setItem("isdark", "false");
+
+    const readerTp = readerType();
+    if (readerTp === "N") {
+        chrome.storage.local.get(["weread-bgcolor"])
+            .then((res) => {
+                const color = res["weread-bgcolor"];
+                const bgcolor = document.getElementById('bgcolorSetting');
+                changeColor(color, bgcolor);
+                if (color === 'black') {
+                    localStorage.setItem("isdark", "true");
+                }
+            })
+
+        chrome.runtime.onMessage.addListener(function (message, sender) {
+            const color = message.bgcolor;
             const bgcolor = document.getElementById('bgcolorSetting');
             changeColor(color, bgcolor);
+            colorLoad(color);
         })
+    } else {
+        chrome.storage.local.get(["weread-bgcolor"])
+            .then((res) => {
+                const color = res["weread-bgcolor"];
+                const bgcolor = document.getElementById('bgcolorSetting');
+                changeColorHorizontal(color, bgcolor);
+            })
 
-    chrome.runtime.onMessage.addListener(function (message, sender) {
-        const color = message.bgcolor;
-        const bgcolor = document.getElementById('bgcolorSetting');
-        changeColor(color, bgcolor);
-    })
+        chrome.runtime.onMessage.addListener(function (message, sender) {
+            const color = message.bgcolor;
+            const bgcolor = document.getElementById('bgcolorSetting');
+            changeColorHorizontal(color, bgcolor);
+            colorLoad(color);
+        })
+    }
 });
 
