@@ -68,12 +68,14 @@ document.addEventListener('DOMContentLoaded', function () {
             if (bgcolor) {
                 bgcolor.parentNode.removeChild(bgcolor);
             }
-            injectColorCss("#F6F2E1", 0, "##1c1c1d");
+            document.body.classList.add('wr_whiteTheme');
+            injectColorCss("#F6F2E1", "#FFFDFC", "##1c1c1d");
         } else if (color === "green") {
             if (bgcolor) {
                 bgcolor.parentNode.removeChild(bgcolor);
             }
-            injectColorCss("#D3EFD1", 0, "##1c1c1d");
+            document.body.classList.add('wr_whiteTheme');
+            injectColorCss("#D3EFD1", "#E4FBE5", "##1c1c1d");
         }
     }
 
