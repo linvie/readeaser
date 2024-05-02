@@ -8,6 +8,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
         range.style.background = `linear-gradient(to right, #EDEEEE ${percentage}%, #F8F9F9 ${percentage}%)`;
     }
 
+    function realTimeColor(el) {
+        el.addEventListener('input', function () {
+            updateRangeColor(el, this.value);
+        });
+    }
+
 
     //font-family
     const selectElement = document.querySelector('select');
@@ -59,6 +65,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     //fontSize
     const fontSize = document.querySelector("input[type='range'][id='fontSize']");
+    realTimeColor(fontSize);
     chrome.storage.local.get(["weread-fontSize"])
         .then((res) => {
             fontSize.value = res["weread-fontSize"] || 3;
@@ -74,7 +81,26 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     chrome.tabs.sendMessage(tabs[0].id, { fontSize: e.target.value });
                 })
             updateRangeColor(fontSize, e.target.value);
+        }
+    })
 
+    //topBar
+    const topBar = document.querySelector('#topbar');
+    realTimeColor(topBar);
+    chrome.storage.local.get(["weread-topbar"])
+        .then((res) => {
+            topBar.value = res['weread-topbar'] || 0;
+            updateRangeColor(topBar, topBar.value);
+        })
+    topBar.addEventListener('change', (e) => {
+        const value = e.target.value;
+        if (value) {
+            chrome.storage.local.set({ 'weread-topbar': value });
+            chrome.tabs.query({ active: true, currentWindow: true })
+                .then((tabs) => {
+                    chrome.tabs.sendMessage(tabs[0].id, { topBar: value });
+                })
+            updateRangeColor(topBar, value);
         }
     })
 });

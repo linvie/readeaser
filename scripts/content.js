@@ -280,6 +280,121 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     })
 
+    function injectTopbarCss(value) {
+        const style = document.createElement('style');
+        style.id = 'topbarSetting';
+        style.innerHTML = `
+        .wr_horizontalReader .readerChapterContent {margin-top: ${72 - value}px !important; height:calc(100% - ${132 - 92 * value / 52}px) !important}
+        .readerTopBar {height: ${72 - value}px !important;}
+        `
+        document.head.appendChild(style);
+    }
+
+    const readerTy = readerType();
+    if (readerTy === "N") {
+        const topbar = document.querySelector(".readerTopBar");
+        let readerControl = document.querySelector('.readerControls');
+        chrome.storage.local.get(["weread-topbar"])
+            .then((res) => {
+                const value = res["weread-topbar"]
+                const tbs = document.getElementById("topbarSetting");
+                if (tbs) { tbs.parentNode.removeChild(tbs); }
+                injectTopbarCss(value);
+
+                if (value > 37) {
+                    topbar.style.opacity = '0';
+                    let windowTop = 0;
+                    window.addEventListener('scroll', function () {
+                        let scrollS = window.pageYOffset || document.documentElement.scrollTop;
+
+                        if (scrollS > windowTop) {
+                            readerControl.style.opacity = '0';
+                        } else {
+                            readerControl.style.opacity = '1';
+                        }
+                        windowTop = scrollS;
+                    });
+                } else {
+                    let windowTop = 0;
+                    window.addEventListener('scroll', function () {
+                        let scrollS = window.pageYOffset || document.documentElement.scrollTop;
+                        if (scrollS > windowTop) {
+                            topbar.style.opacity = '0';
+                            readerControl.style.opacity = '0';
+                        } else {
+                            topbar.style.opacity = '1';
+                            readerControl.style.opacity = '1';
+                        }
+                        windowTop = scrollS;
+                    });
+                }
+            })
+        chrome.runtime.onMessage.addListener((message) => {
+            const value = message.topBar;
+            if (value) {
+                const tbs = document.getElementById("topbarSetting");
+                if (tbs) { tbs.parentNode.removeChild(tbs); }
+                injectTopbarCss(value);
+                if (value > 37) {
+                    topbar.style.opacity = '0';
+                    let windowTop = 0;
+                    window.addEventListener('scroll', function () {
+                        let scrollS = window.pageYOffset || document.documentElement.scrollTop;
+                        if (scrollS > windowTop) {
+                            readerControl.style.opacity = '0';
+                        } else {
+                            topbar.style.opacity = '0';
+
+                            readerControl.style.opacity = '1';
+                        }
+                        windowTop = scrollS;
+                    });
+                } else {
+                    let windowTop = 0;
+                    window.addEventListener('scroll', function () {
+                        let scrollS = window.pageYOffset || document.documentElement.scrollTop;
+                        if (scrollS > windowTop) {
+                            topbar.style.opacity = '0';
+                            readerControl.style.opacity = '0';
+                        } else {
+                            topbar.style.opacity = '1';
+                            readerControl.style.opacity = '1';
+                        }
+                        windowTop = scrollS;
+                    });
+                }
+            }
+        })
+    } else {
+        const topbar = document.querySelector(".readerTopBar");
+        chrome.storage.local.get(["weread-topbar"])
+            .then((res) => {
+                const value = res["weread-topbar"]
+                const tbs = document.getElementById("topbarSetting");
+                if (tbs) { tbs.parentNode.removeChild(tbs); }
+                injectTopbarCss(value);
+                if (value > 37) {
+                    topbar.style.opacity = '0';
+                } else {
+                    topbar.style.opacity = '1';
+                }
+            })
+        chrome.runtime.onMessage.addListener((message) => {
+            const value = message.topBar;
+            if (value) {
+                const tbs = document.getElementById("topbarSetting");
+                if (tbs) { tbs.parentNode.removeChild(tbs); }
+                injectTopbarCss(value);
+                if (value > 37) {
+                    topbar.style.opacity = '0';
+                } else {
+                    topbar.style.opacity = '1';
+                }
+            }
+            activeSetting();
+
+        })
+    }
 
 
 });
