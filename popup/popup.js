@@ -47,4 +47,26 @@ document.addEventListener('DOMContentLoaded', (event) => {
         })
     })
 
+    //slide
+    const ranges = document.querySelectorAll("input[type='range']");
+    console.log(ranges[0])
+    function updateRangeColor(range) {
+        const max = range.max || 100;
+        const min = range.min || 0;
+        const value = range.value;
+
+        const percentage = ((value - min) / (max - min)) * 100 + 1 / 15;
+
+        range.style.background = `linear-gradient(to right, #EDEEEE ${percentage}%, #F8F9F9 ${percentage}%)`;
+    }
+
+    ranges.forEach(r => {
+        const range = r
+        updateRangeColor(range);
+        range.addEventListener('input', function () {
+            console.log("slide")
+            updateRangeColor(this);
+        });
+    });
+
 });
