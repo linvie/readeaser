@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', (event) => {
+    function updateRangeColor(range, value) {
+        const max = range.max || 100;
+        const min = range.min || 0;
+
+        const percentage = ((value - min) / (max - min)) * 100 + 1 / 15;
+
+        range.style.background = `linear-gradient(to right, #EDEEEE ${percentage}%, #F8F9F9 ${percentage}%)`;
+    }
+
+
     //font-family
     const selectElement = document.querySelector('select');
     chrome.storage.local.get(["weread-fontFamily"], (result) => {
@@ -47,26 +57,24 @@ document.addEventListener('DOMContentLoaded', (event) => {
         })
     })
 
-    //slide
-    const ranges = document.querySelectorAll("input[type='range']");
-    console.log(ranges[0])
-    function updateRangeColor(range) {
-        const max = range.max || 100;
-        const min = range.min || 0;
-        const value = range.value;
+    //fontSize
+    const fontSize = document.querySelector("input[type='range'][id='fontSize']");
+    chrome.storage.local.get(["weread-fontSize"])
+        .then((res) => {
+            fontSize.value = res["weread-fontSize"] || 3;
+            updateRangeColor(fontSize, fontSize.value);
+        })
+    fontSize.addEventListener('change', (e) => {
+        if (e.target.value) {
+            chrome.storage.local.set({ 'weread-fontSize': e.target.value }).then(() => {
+                console.log("fontSize changed to" + e.target.value);
+            })
+            chrome.tabs.query({ active: true, currentWindow: true })
+                .then((tabs) => {
+                    chrome.tabs.sendMessage(tabs[0].id, { fontSize: e.target.value });
+                })
+            updateRangeColor(fontSize, e.target.value);
 
-        const percentage = ((value - min) / (max - min)) * 100 + 1 / 15;
-
-        range.style.background = `linear-gradient(to right, #EDEEEE ${percentage}%, #F8F9F9 ${percentage}%)`;
-    }
-
-    ranges.forEach(r => {
-        const range = r
-        updateRangeColor(range);
-        range.addEventListener('input', function () {
-            console.log("slide")
-            updateRangeColor(this);
-        });
-    });
-
+        }
+    })
 });

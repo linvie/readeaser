@@ -156,6 +156,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+
     const whiteBlack = document.querySelectorAll('button[title="深色"], button[title="浅色"]');
     whiteBlack[0].style.display = "none";
 
@@ -228,5 +229,58 @@ document.addEventListener('DOMContentLoaded', function () {
             colorLoad(color);
         })
     }
+
+
+    function simulateDrag(slider, startX, endX) {
+        let mouseDownEvent = new MouseEvent('mousedown', {
+            bubbles: true,
+            cancelable: true,
+            clientX: startX,
+        });
+
+        let mouseMoveEvent = new MouseEvent('mousemove', {
+            bubbles: true,
+            cancelable: true,
+            clientX: endX,
+        });
+
+        let mouseUpEvent = new MouseEvent('mouseup', {
+            bubbles: true,
+            cancelable: true,
+        });
+
+        slider.dispatchEvent(mouseDownEvent);
+        slider.dispatchEvent(mouseMoveEvent);
+        slider.dispatchEvent(mouseUpEvent);
+    }
+
+    const isexpand = document.getElementsByClassName("readerControls_fontSize");
+    isexpand[0].style.opacity = 0;
+    const downloadApp = document.querySelector("button[title='下载App'");
+    downloadApp.style.display = "none";
+
+
+    chrome.runtime.onMessage.addListener(function (message) {
+        if (message.fontSize) {
+            const currentSize = message.fontSize;
+            const slider = document.getElementsByClassName("vue-slider-dot-handle");
+            let dotFonts = document.querySelector("div[role='slider']");
+            const ariaValueNow = parseInt(dotFonts.getAttribute('aria-valuenow'), 10);
+
+
+            if (!isexpand[0].classList.contains("expand")) {
+                isexpand[0].click();
+            } else {
+                let rect = slider[0].getBoundingClientRect();
+                const move = (currentSize - ariaValueNow) * 20;
+                simulateDrag(slider[0], rect.left, rect.left + move);
+                console.log(currentSize, ariaValueNow, rect.left, move)
+            }
+
+        }
+    })
+
+
+
 });
 
