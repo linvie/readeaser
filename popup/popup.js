@@ -103,4 +103,24 @@ document.addEventListener('DOMContentLoaded', (event) => {
             updateRangeColor(topBar, value);
         }
     })
-});
+
+    //pagewidth
+    const pw = document.querySelector('#pagewidth');
+    realTimeColor(pw);
+    chrome.storage.local.get(["weread-pagewidth"])
+        .then((res) => {
+            pw.value = res['weread-pagewidth'] || 70;
+            updateRangeColor(pw, pw.value);
+        })
+    pw.addEventListener('change', (e) => {
+        const value = e.target.value;
+        if (value) {
+            chrome.storage.local.set({ 'weread-pagewidth': value });
+            chrome.tabs.query({ active: true, currentWindow: true })
+                .then((tabs) => {
+                    chrome.tabs.sendMessage(tabs[0].id, { pageWidth: value });
+                })
+            updateRangeColor(pw, value);
+        }
+    })
+})
