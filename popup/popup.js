@@ -123,4 +123,24 @@ document.addEventListener('DOMContentLoaded', (event) => {
             updateRangeColor(pw, value);
         }
     })
+
+    //autoRead
+    const speed = document.querySelector('#autoread');
+    realTimeColor(speed);
+    chrome.storage.local.get(["weread-autospeed"])
+        .then((res) => {
+            speed.value = res['weread-autospeed'] || 0;
+            updateRangeColor(speed, speed.value);
+        })
+    speed.addEventListener('change', (e) => {
+        const value = e.target.value;
+        if (value) {
+            chrome.storage.local.set({ 'weread-autospeed': value });
+            chrome.tabs.query({ active: true, currentWindow: true })
+                .then((tabs) => {
+                    chrome.tabs.sendMessage(tabs[0].id, { autoSpeed: value });
+                })
+            updateRangeColor(speed, value);
+        }
+    })
 })

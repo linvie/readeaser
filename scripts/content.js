@@ -161,8 +161,6 @@ document.addEventListener('DOMContentLoaded', function () {
     whiteBlack[0].style.display = "none";
 
 
-
-
     chrome.storage.local.get(["weread-fontFamily"])
         .then((result) => {
             const fontFamily = result["weread-fontFamily"];
@@ -424,6 +422,56 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     })
 
+    var autoScrollTimer;
+
+    function autoScroll(time) {
+        const distance = 1;
+        if (autoScrollTimer) {
+            clearInterval(autoScrollTimer);
+        }
+        autoScrollTimer = setInterval(function () {
+            const beforeScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight;
+            window.scrollBy(0, distance);
+            const afterScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+
+            if (afterScrollTop >= scrollHeight || afterScrollTop === beforeScrollTop) {
+                clearInterval(autoScrollTimer);
+            }
+        }, time);
+    }
+
+    function resetAutoScroll() {
+        if (autoScrollTimer) {
+            clearInterval(autoScrollTimer);
+        }
+    }
+
+    const speeds = [NaN, 40, 30, 25, 20, 10, 5];
+    if (readerTp === "N") {
+
+        window.addEventListener('load', (event) => {
+            chrome.storage.local.get(['weread-autospeed'])
+                .then((res) => {
+                    const value = res['weread-autospeed']
+                    if (value != 0) {
+                        autoScroll(speeds[value]);
+                    } else {
+                        resetAutoScroll();
+                    }
+                })
+        })
+        chrome.runtime.onMessage.addListener((message) => {
+            const value = message.autoSpeed
+            if (value) {
+                if (value != 0) {
+                    autoScroll(speeds[value]);
+                } else {
+                    resetAutoScroll();
+                }
+            }
+        })
+    }
 
 });
 
