@@ -2,7 +2,7 @@
     "name": "readeaser",
     "author": "linvie",
     "description": "微信读书网页版美化",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "manifest_version": 3,
     "action": {
         "default_icon": {
@@ -35,12 +35,8 @@
             "run_at": "document_start"
         }
     ],
-    "host_permissions": [
-        "https://weread.qq.com/web/reader/*"
-    ],
     "permissions": [
         "storage",
-        "tabs",
         "activeTab"
     ],
     "web_accessible_resources": [
