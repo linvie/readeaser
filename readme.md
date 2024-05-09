@@ -27,6 +27,6 @@
 
 ## 下载
 
-<a href="http://example.com">
+<a href="https://chromewebstore.google.com/detail/readeaser/pfibgbgioglhioghjjikmndejenllpnh">
     <img src="readme.assets/chromeweb.jpg" style="zoom:50%; display:block; margin-left:0;" />
 </a>
