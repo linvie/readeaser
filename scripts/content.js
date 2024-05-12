@@ -414,14 +414,21 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function injectPageWidthCss(value) {
-        const style = document.createElement('style');
-        style.id = 'pagewidthSetting';
-        style.innerHTML = `
+        if (readerTp === 'N') {
+            const readerTopBar = document.querySelector(".readerTopBar");
+            const readerContent = document.querySelector(".readerContent .app_content");
+            readerContent.style.maxWidth = value + "vw";
+            readerTopBar.style.maxWidth = value + "vw";
+        } else {
+            const style = document.createElement('style');
+            style.id = 'pagewidthSetting';
+            style.innerHTML = `
         .wr_horizontalReader .readerChapterContent {width: ${75 + (value - 60) / 40 * 23}vw !important;}
-        .readerTopBar {max-width: ${value}vw !important;}
-        .readerContent .app_content{max-width:${value}vw !important;}
+        // .readerTopBar {max-width: ${value}vw !important;}
+        // .readerContent .app_content{max-width:${value}vw !important;}
         `
-        document.head.appendChild(style);
+            document.head.appendChild(style);
+        }
     }
 
     chrome.storage.local.get(["weread-pagewidth"])
