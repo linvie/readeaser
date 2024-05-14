@@ -192,7 +192,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // };
     // const observer = new MutationObserver(callback);
 
-    localStorage.setItem("isdark", "false");
 
     const readerTp = readerType();
     if (readerTp === "N") {

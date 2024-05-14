@@ -134,8 +134,8 @@ select:hover {
     font-family: "Founderkai";
 }
 
-fieldset{
-    position: relative;
+.Alipinyin {
+    font-family: "Alipinyin";
 }
 
 input[type="radio"] {
@@ -171,7 +171,6 @@ input[type="radio"]:checked:before {
   
 #color1 {
     border: 10px solid #FFF; 
-
 }
 
 #color1:before{
@@ -206,21 +205,32 @@ input[type="radio"]:checked:before {
 
 .icond{
     background-image: url("../image/icons/icond.png");
+    right: 1.865px;
+    bottom: 1.865px;
 }
 
 .iconw{
     background-image: url("../image/icons/iconw.png");
+    left: 1.865px;
+    bottom: 1.865px;
 }
 
-/* .chose .icon {
+
+.chose {
+    position: relative;
+}
+
+.chose .icon {
     display:block;
     width: 20px;
     height: 20px;
     position: absolute;
-    top: 0;
-    left: 0;
     z-index: 2;
-} */
+    background-size: cover;
+  background-position: center; 
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
 
 input[type='range'] {
     -webkit-appearance: none;

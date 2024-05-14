@@ -30,3 +30,7 @@
     font-family: "ChillDuanHeiSong";
     src: url("chrome-extension://__MSG_@@extension_id__/fonts/ChillDuanHeiSong.otf");
 }
+@font-face {
+    font-family: "Alipinyin";
+    src: url("chrome-extension://__MSG_@@extension_id__/fonts/AlibabaHealthFont2.0PY-Bold.ttc");
+}
