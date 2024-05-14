@@ -138,7 +138,7 @@ select:hover {
     font-family: "Alipinyin";
 }
 
-input[type="radio"] {
+.background input[type="radio"] {
     -webkit-appearance: none; 
     -moz-appearance: none;
     appearance: none;
@@ -150,7 +150,7 @@ input[type="radio"] {
     position: relative;
   }
 
-input[type="radio"]:before {
+.background input[type="radio"]:before {
     content: '';
     display: inline-block;
     width: 20px;
@@ -164,7 +164,7 @@ input[type="radio"]:before {
   }
   
   
-input[type="radio"]:checked:before {
+.background input[type="radio"]:checked:before {
     opacity: 1; 
   }
   
@@ -216,11 +216,21 @@ input[type="radio"]:checked:before {
 }
 
 
-.chose {
+fieldset {
     position: relative;
+    border: none;
+    margin: 0;
+    padding: 0;
+    margin: 0 36px 0 auto;
+    width: 150px;
+    height: 20px;
+    flex-shrink: 0;
+    display:flex;
+    justify-content: center;
+    align-items: center; 
 }
 
-.chose .icon {
+.background .icon {
     display:block;
     width: 20px;
     height: 20px;
@@ -254,4 +264,79 @@ input[type="range"]::-webkit-slider-thumb {
     border-radius: 10px;
     background: #FFF !important;
     z-index: 1;
+}
+
+.dyslexia input[type="radio"] {
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
+    width: 56px;
+    height: 29px;
+    border-radius:  5px;
+    display: inline-block;
+    background: #F8F9F9;
+  }
+
+.dyslexia input[type="radio"]:checked {
+    background-color: #EDEEEE;
+  }
+
+#highlight {
+    margin-left: 37px;
+}
+
+#underline {
+    margin-left: 29px;
+}
+
+.dyslexiaTxt {
+    width: 56px;
+    height: 29px;
+    line-height: 29px;
+    position: absolute;
+    pointer-events: none;
+    justify-content: center;
+    align-items: center; 
+    text-align: center;
+font-family: "SourceHanSansCN";
+font-size: 12px;
+
+}
+
+.highlightTxt {
+    left: 37px;
+}
+
+.underlineTxt {
+    right: 0;
+}
+
+input[type='radio'] {
+    cursor: pointer;
+  }
+  
+
+a{
+    text-decoration: none;
+}
+
+.footer {
+    margin-top: 22px;
+}
+
+.version {
+    display: flex;
+    margin: 0 auto;
+    width: 53px;
+    height: 16px;
+    flex-direction: column;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #958C8C;
+    text-align: center;
+    font-family: "SourceHanSerifCN";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
 }

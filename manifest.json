@@ -2,7 +2,7 @@
     "name": "readeaser",
     "author": "linvie",
     "description": "微信读书网页版美化",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "manifest_version": 3,
     "action": {
         "default_icon": {
