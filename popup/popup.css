@@ -270,7 +270,9 @@ input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none; 
     -moz-appearance: none;
     appearance: none;
-    width: 56px;
+    margin: 0;
+    padding: 0;
+    width: 42px;
     height: 29px;
     border-radius:  5px;
     display: inline-block;
@@ -282,15 +284,19 @@ input[type="range"]::-webkit-slider-thumb {
   }
 
 #highlight {
-    margin-left: 37px;
+    margin-left: 33px;
 }
 
 #underline {
-    margin-left: 29px;
+    margin-left: 12px;
+}
+
+#linefocus {
+    margin-left: 12px;
 }
 
 .dyslexiaTxt {
-    width: 56px;
+    width: 42px;
     height: 29px;
     line-height: 29px;
     position: absolute;
@@ -304,15 +310,26 @@ font-size: 12px;
 }
 
 .highlightTxt {
-    left: 37px;
+    left: 33px;
 }
 
 .underlineTxt {
+    left: 87px ;
+
+}
+
+.linefocusTxt {
     right: 0;
 }
 
 input[type='radio'] {
     cursor: pointer;
+  }
+
+  label{
+    margin: 0;
+    padding: 0;
+    height: 29px;
   }
   
 
