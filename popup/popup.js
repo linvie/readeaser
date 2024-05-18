@@ -1,146 +1,181 @@
-document.addEventListener('DOMContentLoaded', (event) => {
-    function updateRangeColor(range, value) {
-        const max = range.max || 100;
-        const min = range.min || 0;
+document.addEventListener("DOMContentLoaded", (event) => {
+  function updateRangeColor(range, value) {
+    const max = range.max || 100;
+    const min = range.min || 0;
 
-        const percentage = ((value - min) / (max - min)) * 100 + 1 / 15;
+    const percentage = ((value - min) / (max - min)) * 100 + 1 / 15;
 
-        range.style.background = `linear-gradient(to right, #EDEEEE ${percentage}%, #F8F9F9 ${percentage}%)`;
-    }
+    range.style.background = `linear-gradient(to right, #EDEEEE ${percentage}%, #F8F9F9 ${percentage}%)`;
+  }
 
-    function realTimeColor(el) {
-        el.addEventListener('input', function () {
-            updateRangeColor(el, this.value);
+  function realTimeColor(el) {
+    el.addEventListener("input", function () {
+      updateRangeColor(el, this.value);
+    });
+  }
+
+  //font-family
+  const selectElement = document.querySelector("select");
+  chrome.storage.local.get(["weread-fontFamily"], (result) => {
+    selectElement.value = result["weread-fontFamily"] || "系统字体";
+  });
+
+  selectElement.addEventListener("change", (e) => {
+    const value = e.target.value;
+    chrome.storage.local.set({ "weread-fontFamily": value });
+    chrome.tabs
+      .query({ active: true, currentWindow: true })
+      .then((tabs) => {
+        chrome.tabs.sendMessage(tabs[0].id, { fontFamily: value }, () => {
+          console.log("send to" + tabs[0].id + { fontFamily: value });
         });
+      })
+      .catch((error) => {
+        console.error("An error occurred: " + error);
+      });
+  });
+
+  //background
+  const radioButton = document.querySelectorAll(
+    "input[type='radio'][name='bg-color']"
+  );
+  chrome.storage.local.get(["weread-bgcolor"]).then((res) => {
+    const color = res["weread-bgcolor"];
+    if (color) {
+      radioButton.forEach((radio) => {
+        if (radio.value === color) {
+          radio.checked = true;
+        }
+      });
     }
-
-
-    //font-family
-    const selectElement = document.querySelector('select');
-    chrome.storage.local.get(["weread-fontFamily"], (result) => {
-        selectElement.value = result["weread-fontFamily"] || '系统字体';
+  });
+  radioButton.forEach((radio) => {
+    radio.addEventListener("change", (e) => {
+      if (e.target.checked) {
+        const value = e.target.value;
+        chrome.storage.local.set({ "weread-bgcolor": value }).then(() => {
+          console.log("success!");
+        });
+        chrome.tabs
+          .query({ active: true, currentWindow: true })
+          .then((tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { bgcolor: value });
+          });
+      }
     });
+  });
 
-    selectElement.addEventListener('change', (e) => {
-        const value = e.target.value;
-        chrome.storage.local.set({ "weread-fontFamily": value });
-        chrome.tabs.query({ active: true, currentWindow: true })
-            .then((tabs) => {
-                chrome.tabs.sendMessage(tabs[0].id, { fontFamily: value }, () => {
-                    console.log("send to" + tabs[0].id + { fontFamily: value })
-                });
-            })
-            .catch((error) => {
-                console.error('An error occurred: ' + error);
-            });
+  //fontSize
+  const fontSize = document.querySelector("input[type='range'][id='fontSize']");
+  realTimeColor(fontSize);
+  chrome.storage.local.get(["weread-fontSize"]).then((res) => {
+    fontSize.value = res["weread-fontSize"] || 3;
+    updateRangeColor(fontSize, fontSize.value);
+  });
+  fontSize.addEventListener("change", (e) => {
+    if (e.target.value) {
+      chrome.storage.local
+        .set({ "weread-fontSize": e.target.value })
+        .then(() => {
+          console.log("fontSize changed to" + e.target.value);
+        });
+      chrome.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
+        chrome.tabs.sendMessage(tabs[0].id, { fontSize: e.target.value });
+      });
+      updateRangeColor(fontSize, e.target.value);
+    }
+  });
+
+  //topBar
+  const topBar = document.querySelector("#topbar");
+  realTimeColor(topBar);
+  chrome.storage.local.get(["weread-topbar"]).then((res) => {
+    topBar.value = res["weread-topbar"] || 0;
+    updateRangeColor(topBar, topBar.value);
+  });
+  topBar.addEventListener("change", (e) => {
+    const value = e.target.value;
+    if (value) {
+      chrome.storage.local.set({ "weread-topbar": value });
+      chrome.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
+        chrome.tabs.sendMessage(tabs[0].id, { topBar: value });
+      });
+      updateRangeColor(topBar, value);
+    }
+  });
+
+  //pagewidth
+  const pw = document.querySelector("#pagewidth");
+  realTimeColor(pw);
+  chrome.storage.local.get(["weread-pagewidth"]).then((res) => {
+    pw.value = res["weread-pagewidth"] || 70;
+    updateRangeColor(pw, pw.value);
+  });
+  pw.addEventListener("change", (e) => {
+    const value = e.target.value;
+    if (value) {
+      chrome.storage.local.set({ "weread-pagewidth": value });
+      chrome.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
+        chrome.tabs.sendMessage(tabs[0].id, { pageWidth: value });
+      });
+      updateRangeColor(pw, value);
+    }
+  });
+
+  //autoRead
+  const speed = document.querySelector("#autoread");
+  realTimeColor(speed);
+  chrome.storage.local.get(["weread-autospeed"]).then((res) => {
+    speed.value = res["weread-autospeed"] || 0;
+    updateRangeColor(speed, speed.value);
+  });
+  speed.addEventListener("change", (e) => {
+    const value = e.target.value;
+    if (value) {
+      chrome.storage.local.set({ "weread-autospeed": value });
+      chrome.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
+        chrome.tabs.sendMessage(tabs[0].id, { autoSpeed: value });
+      });
+      updateRangeColor(speed, value);
+    }
+  });
+
+  //focusMode
+  const focus = document.querySelectorAll("input[name='dyslexia']");
+  chrome.storage.local.get(["weread-focusMode"]).then((res) => {
+    const mode = res["weread-focusMode"];
+    if (mode) {
+      focus.forEach((f) => {
+        if (f.value == mode) {
+          f.checked = true;
+        }
+      });
+    }
+  });
+
+  focus.forEach((f) => {
+    f.addEventListener("change", (e) => {
+      if (e.target.value) {
+        const focusMode = e.target.value;
+        chrome.storage.local.set({ "weread-focusMode": focusMode });
+        chrome.tabs
+          .query({ active: true, currentWindow: true })
+          .then((tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { focusMode: focusMode });
+          });
+      }
     });
+  });
 
-    //background
-    const radioButton = document.querySelectorAll("input[type='radio'][name='bg-color']");
-    chrome.storage.local.get(["weread-bgcolor"])
-        .then((res) => {
-            const color = res['weread-bgcolor'];
-            if (color) {
-                radioButton.forEach((radio) => {
-                    if (radio.value === color) {
-                        radio.checked = true;
-                    }
-                })
-            }
-        })
-    radioButton.forEach(radio => {
-        radio.addEventListener('change', (e) => {
-            if (e.target.checked) {
-                const value = e.target.value;
-                chrome.storage.local.set({ 'weread-bgcolor': value }).then(() => {
-                    console.log("success!")
-                });
-                chrome.tabs.query({ active: true, currentWindow: true })
-                    .then((tabs) => {
-                        chrome.tabs.sendMessage(tabs[0].id, { bgcolor: value })
-                    })
-            }
-        })
-    })
-
-    //fontSize
-    const fontSize = document.querySelector("input[type='range'][id='fontSize']");
-    realTimeColor(fontSize);
-    chrome.storage.local.get(["weread-fontSize"])
-        .then((res) => {
-            fontSize.value = res["weread-fontSize"] || 3;
-            updateRangeColor(fontSize, fontSize.value);
-        })
-    fontSize.addEventListener('change', (e) => {
-        if (e.target.value) {
-            chrome.storage.local.set({ 'weread-fontSize': e.target.value }).then(() => {
-                console.log("fontSize changed to" + e.target.value);
-            })
-            chrome.tabs.query({ active: true, currentWindow: true })
-                .then((tabs) => {
-                    chrome.tabs.sendMessage(tabs[0].id, { fontSize: e.target.value });
-                })
-            updateRangeColor(fontSize, e.target.value);
-        }
-    })
-
-    //topBar
-    const topBar = document.querySelector('#topbar');
-    realTimeColor(topBar);
-    chrome.storage.local.get(["weread-topbar"])
-        .then((res) => {
-            topBar.value = res['weread-topbar'] || 0;
-            updateRangeColor(topBar, topBar.value);
-        })
-    topBar.addEventListener('change', (e) => {
-        const value = e.target.value;
-        if (value) {
-            chrome.storage.local.set({ 'weread-topbar': value });
-            chrome.tabs.query({ active: true, currentWindow: true })
-                .then((tabs) => {
-                    chrome.tabs.sendMessage(tabs[0].id, { topBar: value });
-                })
-            updateRangeColor(topBar, value);
-        }
-    })
-
-    //pagewidth
-    const pw = document.querySelector('#pagewidth');
-    realTimeColor(pw);
-    chrome.storage.local.get(["weread-pagewidth"])
-        .then((res) => {
-            pw.value = res['weread-pagewidth'] || 70;
-            updateRangeColor(pw, pw.value);
-        })
-    pw.addEventListener('change', (e) => {
-        const value = e.target.value;
-        if (value) {
-            chrome.storage.local.set({ 'weread-pagewidth': value });
-            chrome.tabs.query({ active: true, currentWindow: true })
-                .then((tabs) => {
-                    chrome.tabs.sendMessage(tabs[0].id, { pageWidth: value });
-                })
-            updateRangeColor(pw, value);
-        }
-    })
-
-    //autoRead
-    const speed = document.querySelector('#autoread');
-    realTimeColor(speed);
-    chrome.storage.local.get(["weread-autospeed"])
-        .then((res) => {
-            speed.value = res['weread-autospeed'] || 0;
-            updateRangeColor(speed, speed.value);
-        })
-    speed.addEventListener('change', (e) => {
-        const value = e.target.value;
-        if (value) {
-            chrome.storage.local.set({ 'weread-autospeed': value });
-            chrome.tabs.query({ active: true, currentWindow: true })
-                .then((tabs) => {
-                    chrome.tabs.sendMessage(tabs[0].id, { autoSpeed: value });
-                })
-            updateRangeColor(speed, value);
-        }
-    })
-})
+  //link
+  var links = document.getElementsByTagName("a");
+  for (var i = 0; i < links.length; i++) {
+    (function () {
+      var ln = links[i];
+      var location = ln.href;
+      ln.onclick = function () {
+        chrome.tabs.create({ active: true, url: location });
+      };
+    })();
+  }
+});
