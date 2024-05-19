@@ -150,14 +150,16 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function readerType() {
-    const readerType = document.querySelector(
-      "button[class*='readerControls_item']:first-child"
+    const readerButtons = document.querySelectorAll(
+      "button[class*='readerControls_item']"
     );
-    if (readerType.classList.contains("isNormalReader")) {
-      return "N";
-    } else {
-      return "H";
-    }
+    let type = "H";
+    readerButtons.forEach((button) => {
+      if (button.classList.contains("isNormalReader")) {
+        type = "N";
+      }
+    });
+    return type;
   }
 
   const whiteBlack = document.querySelectorAll(
@@ -467,7 +469,11 @@ document.addEventListener("DOMContentLoaded", function () {
         afterScrollTop >= scrollHeight ||
         afterScrollTop === beforeScrollTop
       ) {
-        clearInterval(autoScrollTimer);
+        const event = new KeyboardEvent("keydown", {
+          key: "ArrowRight",
+          keyCode: 39,
+        });
+        document.dispatchEvent(event);
       }
     }, time);
   }
