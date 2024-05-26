@@ -38,5 +38,5 @@
 ## 下载
 
 <a href="https://chromewebstore.google.com/detail/readeaser/pfibgbgioglhioghjjikmndejenllpnh">
-    <img src="readme.assets/chromeweb.jpg" style="zoom:50%; display:block; margin-left:0;" />
+    <img src=".\image\promo\chromeweb.jpg" style="zoom:50%; display:block; margin-left:0;" />
 </a>
