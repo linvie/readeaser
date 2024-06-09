@@ -965,47 +965,109 @@ window.onload = function () {
   }
 
   // copy dict content
-  const dictHeader = document.querySelector(
-    ".reader_float_search_panel_wrapper .reader_float_panel_header"
-  );
-
-  const copyBtn = document.createElement("button");
-
-  copyBtn.style.background =
-    "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='16px' viewBox='0 -960 960 960' width='16px' fill='%235f6368'%3E%3Cpath d='M360-240q-29.7 0-50.85-21.15Q288-282.3 288-312v-480q0-29.7 21.15-50.85Q330.3-864 360-864h384q29.7 0 50.85 21.15Q816-821.7 816-792v480q0 29.7-21.15 50.85Q773.7-240 744-240H360Zm0-72h384v-480H360v480ZM216-96q-29.7 0-50.85-21.15Q144-138.3 144-168v-552h72v552h456v72H216Zm144-216v-480 480Z'/%3E%3C/svg%3E\") no-repeat center center";
-
-  copyBtn.id = "copyBtn";
-  copyBtn.style.height = "16px";
-  copyBtn.style.width = "16px";
-  copyBtn.style.position = "absolute";
-  copyBtn.style.left = "16px";
-  copyBtn.style.pointerEvents = "all";
-
-  dictHeader.appendChild(copyBtn);
-
-  copyBtn.addEventListener("click", () => {
-    let m = document.querySelector(".reader_float_search_panel_action_means");
-    if (m) {
-      console.log("clicked");
-      let text = "";
-      Array.from(m.children).forEach((child) => {
-        text += child.innerText + "\n";
-      });
-      text = text.trim();
-      copyToClipboard(text);
-    } else {
-      alert("字典不存在");
-    }
-  });
-
-  function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(
-      function () {
-        alert("成功将字典内容复制到剪切板");
-      },
-      function (err) {
-        console.error("复制失败: ", err);
-      }
+  if (readerTp != "P") {
+    const dictHeader = document.querySelector(
+      ".reader_float_search_panel_wrapper .reader_float_panel_header"
     );
+
+    const copyBtn = document.createElement("button");
+
+    copyBtn.style.background =
+      "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='16px' viewBox='0 -960 960 960' width='16px' fill='%235f6368'%3E%3Cpath d='M360-240q-29.7 0-50.85-21.15Q288-282.3 288-312v-480q0-29.7 21.15-50.85Q330.3-864 360-864h384q29.7 0 50.85 21.15Q816-821.7 816-792v480q0 29.7-21.15 50.85Q773.7-240 744-240H360Zm0-72h384v-480H360v480ZM216-96q-29.7 0-50.85-21.15Q144-138.3 144-168v-552h72v552h456v72H216Zm144-216v-480 480Z'/%3E%3C/svg%3E\") no-repeat center center";
+
+    copyBtn.id = "copyBtn";
+    copyBtn.style.height = "16px";
+    copyBtn.style.width = "16px";
+    copyBtn.style.position = "absolute";
+    copyBtn.style.left = "16px";
+    copyBtn.style.pointerEvents = "all";
+
+    dictHeader.appendChild(copyBtn);
+
+    copyBtn.addEventListener("click", () => {
+      let m = document.querySelector(".reader_float_search_panel_action_means");
+      if (m) {
+        console.log("clicked");
+        let text = "";
+        Array.from(m.children).forEach((child) => {
+          text += child.innerText + "\n";
+        });
+        text = text.trim();
+        copyToClipboard(text);
+      } else {
+        alert("字典不存在");
+      }
+    });
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(
+        function () {
+          alert("成功将字典内容复制到剪切板");
+        },
+        function (err) {
+          console.error("复制失败: ", err);
+        }
+      );
+    }
+  }
+
+  // PDF reader
+  if (readerTp === "P") {
+    const page = document.querySelector("body");
+    if (page) {
+      const btn = document.querySelector(".reader_pdf_tool");
+      const back = document.createElement("div");
+      back.style.position = "fixed";
+      back.style.top = 0;
+      back.style.left = 0;
+      back.style.width = "100px";
+      back.style.height = "100%";
+      back.style.background = "transparent";
+      back.style.zIndex = "1000";
+      page.appendChild(back);
+
+      const forward = document.createElement("div");
+      forward.style.position = "fixed";
+      forward.style.top = 0;
+      forward.style.right = 0;
+      forward.style.width = "100px";
+      forward.style.height = "100%";
+      forward.style.background = "transparent";
+      forward.style.zIndex = "1000";
+      page.appendChild(forward);
+
+      back.onclick = () => {
+        document
+          .querySelector(".reader_pdf_tool_content_navigator_back")
+          .click();
+        btn.style.display = "none";
+      };
+      forward.onclick = () => {
+        document
+          .querySelector(".reader_pdf_tool_content_navigator_forward")
+          .click();
+        btn.style.display = "none";
+      };
+
+      document.addEventListener("keydown", handleKeyPress);
+
+      function handleKeyPress(event) {
+        if (event.key === "ArrowLeft") {
+          const backButton = document.querySelector(
+            ".reader_pdf_tool_content_navigator_back"
+          );
+          if (backButton) {
+            backButton.click();
+          }
+        } else if (event.key === "ArrowRight") {
+          const forwardButton = document.querySelector(
+            ".reader_pdf_tool_content_navigator_forward"
+          );
+          if (forwardButton) {
+            forwardButton.click();
+          }
+        }
+      }
+    }
   }
 };
