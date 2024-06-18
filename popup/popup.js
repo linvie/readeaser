@@ -3,7 +3,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const max = range.max || 100;
     const min = range.min || 0;
 
-    const percentage = ((value - min) / (max - min)) * 100 + 1 / 15;
+    const percentage =
+      ((((value - min) / (max - min)) * 13) / 15 + 1 / 15) * 100;
 
     range.style.background = `linear-gradient(to right, #EDEEEE ${percentage}%, #F8F9F9 ${percentage}%)`;
   }
