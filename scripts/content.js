@@ -531,6 +531,12 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 window.onload = function () {
+  //remove button
+  const wetype = document.querySelector(".wetype");
+  if (wetype) {
+    wetype.remove();
+  }
+
   // focus mode
   function readerType() {
     const readerButtons = document.querySelectorAll(
@@ -551,6 +557,44 @@ window.onload = function () {
   const readerTp = readerType();
 
   if (readerTp === "N") {
+    const buttons = document.querySelector(".readerControls");
+    const copyBtn = createSlideCopyButton();
+    const focusBtn = createSlideFocusButton();
+    buttons.insertBefore(copyBtn, buttons.firstChild);
+    runCopyDict(copyBtn);
+    buttons.insertBefore(focusBtn, buttons.firstChild);
+    runFocusMode(focusBtn);
+
+    function createSlideFocusButton() {
+      const focusButton = document.createElement("button");
+      focusButton.className = "readerControls_item focus";
+      focusButton.title = "专注模式";
+      const iconURL = chrome.runtime.getURL("image/icons/focuslide.svg");
+
+      const buttonContent = `
+  <span class="icon" style="background:url('${iconURL}') no-repeat center;">
+  </span>
+  `;
+      focusButton.innerHTML = buttonContent;
+
+      return focusButton;
+    }
+
+    function createSlideCopyButton() {
+      const focusButton = document.createElement("button");
+      focusButton.className = "readerControls_item copydic";
+      focusButton.title = "复制字典内容";
+      const iconURL = chrome.runtime.getURL("image/icons/copy.svg");
+
+      const buttonContent = `
+  <span class="icon" style="background:url('${iconURL}') no-repeat center; z-index:10">
+  </span>
+  `;
+      focusButton.innerHTML = buttonContent;
+
+      return focusButton;
+    }
+
     function createFocusButton() {
       const focusButton = document.createElement("button");
       focusButton.className = "toolbarItem focus";
@@ -565,6 +609,33 @@ window.onload = function () {
       focusButton.innerHTML = buttonContent;
 
       return focusButton;
+    }
+
+    function runCopyDict(copyBtn) {
+      copyBtn.addEventListener("click", () => {
+        let m = document.querySelector(".readerDictQueryPanel_item");
+        if (m) {
+          let text = "";
+          Array.from(m.children).forEach((child) => {
+            text += child.innerText + "\n";
+          });
+          text = text.trim();
+          copyToClipboard(text);
+        } else {
+          alert("字典不存在");
+        }
+      });
+
+      function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(
+          function () {
+            alert("成功将字典内容复制到剪切板");
+          },
+          function (err) {
+            console.error("复制失败: ", err);
+          }
+        );
+      }
     }
 
     const renderTargetContainer = document.querySelector(
@@ -594,358 +665,7 @@ window.onload = function () {
               reader_toolbar_itemContainer.appendChild(focusButton);
             observer.disconnect();
 
-            if (focusButton) {
-              focusButton.addEventListener("click", () => {
-                // focusButton.classList.add("selected");
-                // const colorControl = document.createElement("div");
-                // colorControl.className =
-                //   "reader_toolbar_color_container focusMode_add";
-                // colorControl.innerHTML = `
-                // <button class="reader_toolbar_color_item" style="background: rgb(255, 144, 156);"><!---->
-                // </button><button class="reader_toolbar_color_item" style="background: rgb(184, 159, 255);"><!----></button><button class="reader_toolbar_color_item" style="background: rgb(116, 180, 255);"><!----></button><button class="reader_toolbar_color_item" style="background: rgb(112, 211, 130);"><!----></button><button class="reader_toolbar_color_item" style="background: rgb(255, 203, 126);"><span class="reader_toolbar_color_item_selected"></span></button>
-                //     `;
-                // const reader_toolbar_container = document.querySelector(
-                //   ".reader_toolbar_container"
-                // );
-                // reader_toolbar_container.appendChild(colorControl);
-                // setTimeout(() => {
-                //   reader_toolbar_container.style.display = "";
-                // }, 200);
-
-                // const color_bar = document.querySelector(
-                //   ".reader_toolbar_color_container"
-                // );
-                // if (color_bar) {
-                //   // <span class="reader_toolbar_color_item_selected"></span>
-                //   const color_items = color_bar.querySelectorAll(
-                //     ".reader_toolbar_color_item"
-                //   );
-                //   color_items.forEach((item) => {
-                //     item.addEventListener("click", () => {
-                //       color_items.forEach((button) => {
-                //         const span = button.querySelector(
-                //           ".reader_toolbar_color_item_selected"
-                //         );
-                //         if (span) button.removeChild(span);
-                //       });
-                //       const span = document.createElement("span");
-                //       span.className = "reader_toolbar_color_item_selected";
-                //       item.appendChild(span);
-                //       const color_choose = item.style.background;
-                //     });
-                //   });
-                // }
-                //
-
-                function focusColor(color) {
-                  switch (color) {
-                    case "yellow":
-                      return "rgba(166,123,58, 0.3);";
-                      break;
-                    case "green":
-                      return "rgba(80, 149, 48, 0.3)";
-                      break;
-                    default:
-                      return "rgba(65,134,230, 0.3)";
-                  }
-                }
-
-                function calcHeight() {
-                  const selections = document.querySelectorAll(".wr_selection");
-                  const note =
-                    "设置失败。\n使用专注模式前，请选中两个相邻正文段落，前一段两行、后一段一行以完成设置。";
-                  if (selections.length < 3) {
-                    alert(note);
-                    return;
-                  } else {
-                    const heights = Array.from(selections).map((el) =>
-                      parseFloat(el.style.height)
-                    );
-                    const allHeightsAreSame = new Set(heights).size === 1;
-
-                    const tops = Array.from(selections)
-                      .map((el) => parseFloat(el.style.top))
-                      .sort((a, b) => a - b);
-
-                    const topDifferences = new Set(
-                      tops.slice(1).map((top, i) => top - tops[i])
-                    );
-                    const rowHeight = Math.min(...topDifferences);
-                    const sectionHeight = Math.max(...topDifferences);
-                    const maxWidth = Math.max(
-                      ...Array.from(selections).map((el) =>
-                        parseFloat(el.style.width)
-                      )
-                    );
-                    if (!allHeightsAreSame) {
-                      alert(
-                        "设置失败。\n使用专注模式前，请选中两个相邻正文段落，前一段两行、后一段一行以完成设置。\n问题：请选择正文，不应该包括标题或图片！"
-                      );
-                      return;
-                    } else {
-                      if (topDifferences.size === 1) {
-                        alert(
-                          "设置失败。\n使用专注模式前，请选中两个相邻正文段落，前一段两行、后一段一行以完成设置。\n问题：未选择同一段落中两行或未选择新的段落！"
-                        );
-                        return;
-                      } else if (topDifferences.size > 2) {
-                        alert(
-                          "设置失败。\n使用专注模式前，请选中两个相邻正文段落，前一段两行、后一段一行以完成设置。"
-                        );
-                        return;
-                      } else {
-                        return [
-                          rowHeight,
-                          sectionHeight,
-                          maxWidth,
-                          tops[0],
-                          heights[0],
-                        ];
-                      }
-                    }
-                  }
-                }
-
-                function creatFocusComponent(
-                  mode,
-                  color,
-                  maxWidth,
-                  position,
-                  lineHeight
-                ) {
-                  const renderTargetContainer = document.querySelector(
-                    ".renderTargetContainer"
-                  );
-                  const divs =
-                    renderTargetContainer.querySelectorAll(":scope >div");
-                  if (mode === "highlight") {
-                    const focusComponent = document.createElement("div");
-                    focusComponent.className =
-                      "wr_underline_wrapper focusMode_component";
-                    focusComponent.style.cssText = `height:${lineHeight}px;
-                    width:${maxWidth}px;
-                    left:0;
-                    top:${position}px;
-                    background:${color};
-                      `;
-                    focusComponent.innerHTML =
-                      "<div class='wr_underline wr_underline_mark'></div>";
-                    divs[divs.length - 2].appendChild(focusComponent);
-                  } else if (mode === "underline") {
-                    const focusComponent = document.createElement("div");
-                    focusComponent.className =
-                      "wr_underline_wrapper wr_underline_color_3 focusMode_component";
-                    focusComponent.style.cssText = `height:${lineHeight}px;
-                    width:${maxWidth}px;
-                    left:0;
-                    top:${position}px;
-                      `;
-                    focusComponent.innerHTML =
-                      '<div class="wr_underline wr_underline_straight"><span class="wr_underline_straight_start"></span><span class="wr_underline_straight_middle"></span><span class="wr_underline_straight_end"></span></div>';
-                    divs[divs.length - 2].appendChild(focusComponent);
-                  } else if (mode === "linefocus") {
-                    if (color === "black") {
-                      alert("深色背景下，聚焦模式不可用");
-                    } else {
-                      const focusComponent_mask = document.createElement("div");
-                      focusComponent_mask.className =
-                        "focusMode_component focusMask";
-                      focusComponent_mask.style.cssText = `
-                      position: fixed;
-                      top: 0;
-                      left: 0;
-                      width: 100%;
-                      height: 100%;
-                      background: rgba(0, 0, 0, 0);
-                      z-index: 10;
-                      pointer-events: none;
-                      `;
-
-                      const focusComponent_read = document.createElement("div");
-                      focusComponent_read.className =
-                        "focusMode_component focusRead";
-                      focusComponent_read.style.cssText = `
-                      position: absolute;
-                      top: ${position + 2 * lineHeight}px; 
-                      left: 0;
-                      width: 100%;
-                      height: ${lineHeight}px; 
-                      box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.75); 
-                      pointer-events: none;
-                    `;
-
-                      const body = document.querySelector("body");
-                      body.appendChild(focusComponent_mask);
-                      body.appendChild(focusComponent_read);
-                    }
-                  }
-                }
-
-                function focusControl(
-                  mode,
-                  position,
-                  rowHeight,
-                  sectionHeight
-                ) {
-                  let read_bar;
-                  if (mode === "linefocus") {
-                    read_bar = document.querySelector(".focusRead");
-                  } else {
-                    read_bar = document.querySelector(".focusMode_component");
-                  }
-                  function handleKeydown(e) {
-                    if (e.key === "x" || e.key === "X") {
-                      position += rowHeight;
-                      read_bar.style.top = position + "px";
-                      window.scrollBy(0, rowHeight);
-                    }
-                    if (e.key === "S" || e.key === "s") {
-                      position -= rowHeight;
-                      read_bar.style.top = position + "px";
-                      window.scrollBy(0, -rowHeight);
-                    }
-                    if (e.key === "C" || e.key === "c") {
-                      position += sectionHeight;
-                      read_bar.style.top = position + "px";
-                      window.scrollBy(0, sectionHeight);
-                    }
-                    if (e.key === "D" || e.key === "d") {
-                      position -= sectionHeight;
-                      read_bar.style.top = position + "px";
-                      window.scrollBy(0, -sectionHeight);
-                    }
-                    if (e.key === "v" || e.key === "V") {
-                      position += 5;
-                      read_bar.style.top = position + "px";
-                      window.scrollBy(0, 5);
-                    }
-                    if (e.key === "F" || e.key === "f") {
-                      position -= 5;
-                      read_bar.style.top = position + "px";
-                      window.scrollBy(0, -5);
-                    }
-                    if (
-                      (e.key === "z" || e.key === "Z") &&
-                      mode === "linefocus"
-                    ) {
-                      if (read_bar.style.opacity == "1") {
-                        read_bar.style.opacity = "0";
-                      } else {
-                        read_bar.style.opacity = "1";
-                      }
-                    }
-                  }
-                  window.addEventListener("keydown", handleKeydown);
-                  return function removeEventListener() {
-                    window.removeEventListener("keydown", handleKeydown);
-                  };
-                }
-
-                function turnoffFocus() {
-                  focusButton.classList.remove("selected");
-                  removefocusControl();
-                  const focusComponent = document.querySelectorAll(
-                    ".focusMode_component"
-                  );
-                  focusComponent.forEach((item) => {
-                    item.remove();
-                  });
-                }
-
-                function turnonFocus() {
-                  focusButton.classList.add("selected");
-                  if (!calcHeight()) {
-                    focusButton.classList.remove("selected");
-                    return;
-                  }
-                  let [
-                    rowHeight,
-                    sectionHeight,
-                    sectionWidth,
-                    position,
-                    lineHeight,
-                  ] = calcHeight();
-
-                  let color;
-                  let mode;
-                  chrome.storage.local.get(["wread-bgcolor"]).then((res) => {
-                    const bgcolor =
-                      res["weread-bgcolor"] === undefined
-                        ? "white"
-                        : res["weread-bgcolor"];
-                    color = focusColor(bgcolor);
-                  });
-                  chrome.storage.local.get(["weread-focusMode"]).then((res) => {
-                    mode =
-                      res["weread-focusMode"] === undefined
-                        ? "highlight"
-                        : res["weread-focusMode"];
-                  });
-
-                  setTimeout(() => {
-                    creatFocusComponent(
-                      mode,
-                      color,
-                      sectionWidth,
-                      position,
-                      lineHeight
-                    );
-                    removefocusControl = focusControl(
-                      mode,
-                      position,
-                      rowHeight,
-                      sectionHeight
-                    );
-                  }, 200);
-
-                  chrome.runtime.onMessage.addListener((message) => {
-                    if (
-                      message.fontSize ||
-                      message.pageWidth ||
-                      message.autoSpeed
-                    )
-                      turnoffFocus();
-                    else if (message.focusMode) {
-                      let focusComponent;
-                      if (mode === "linefocus") {
-                        focusComponent = document.querySelector(".focusRead");
-                      } else {
-                        focusComponent = document.querySelector(
-                          ".focusMode_component"
-                        );
-                      }
-                      position = parseInt(focusComponent.style.top);
-                      mode = message.focusMode;
-                      console.log(mode);
-                      color = "rgba(65, 134, 230, 0.3)";
-                      turnoffFocus();
-                      focusButton.classList.add("selected");
-                      setTimeout(() => {
-                        creatFocusComponent(
-                          mode,
-                          color,
-                          sectionWidth,
-                          position,
-                          lineHeight
-                        );
-                        removefocusControl = focusControl(
-                          mode,
-                          position,
-                          rowHeight,
-                          sectionHeight
-                        );
-                      }, 50);
-                    }
-                  });
-                }
-
-                if (focusButton.classList.contains("selected")) {
-                  turnoffFocus();
-                } else {
-                  turnonFocus();
-                }
-              });
-            }
+            runFocusMode(focusButton);
           }
         }
       }
@@ -964,8 +684,298 @@ window.onload = function () {
     }, 1000);
   }
 
+  function runFocusMode(focusButton) {
+    if (focusButton) {
+      focusButton.addEventListener("click", () => {
+        function focusColor(color) {
+          switch (color) {
+            case "yellow":
+              return "rgba(166,123,58, 0.3);";
+              break;
+            case "green":
+              return "rgba(80, 149, 48, 0.3)";
+              break;
+            default:
+              return "rgba(65,134,230, 0.3)";
+          }
+        }
+
+        function calcHeight() {
+          const selections = document.querySelectorAll(".wr_selection");
+          const note =
+            "设置失败。\n使用专注模式前，请选中两个相邻正文段落，前一段两行、后一段一行以完成设置。";
+          if (selections.length < 3) {
+            alert(note);
+            return;
+          } else {
+            const heights = Array.from(selections).map((el) =>
+              parseFloat(el.style.height)
+            );
+            const allHeightsAreSame = new Set(heights).size === 1;
+
+            const tops = Array.from(selections)
+              .map((el) => parseFloat(el.style.top))
+              .sort((a, b) => a - b);
+
+            const topDifferences = new Set(
+              tops.slice(1).map((top, i) => top - tops[i])
+            );
+            const rowHeight = Math.min(...topDifferences);
+            const sectionHeight = Math.max(...topDifferences);
+            const maxWidth = Math.max(
+              ...Array.from(selections).map((el) => parseFloat(el.style.width))
+            );
+            if (!allHeightsAreSame) {
+              alert(
+                "设置失败。\n使用专注模式前，请选中两个相邻正文段落，前一段两行、后一段一行以完成设置。\n问题：请选择正文，不应该包括标题或图片！"
+              );
+              return;
+            } else {
+              if (topDifferences.size === 1) {
+                alert(
+                  "设置失败。\n使用专注模式前，请选中两个相邻正文段落，前一段两行、后一段一行以完成设置。\n问题：未选择同一段落中两行或未选择新的段落！"
+                );
+                return;
+              } else if (topDifferences.size > 2) {
+                alert(
+                  "设置失败。\n使用专注模式前，请选中两个相邻正文段落，前一段两行、后一段一行以完成设置。"
+                );
+                return;
+              } else {
+                return [
+                  rowHeight,
+                  sectionHeight,
+                  maxWidth,
+                  tops[0],
+                  heights[0],
+                ];
+              }
+            }
+          }
+        }
+
+        function creatFocusComponent(
+          mode,
+          color,
+          maxWidth,
+          position,
+          lineHeight
+        ) {
+          const renderTargetContainer = document.querySelector(
+            ".renderTargetContainer"
+          );
+          const divs = renderTargetContainer.querySelectorAll(":scope >div");
+          if (mode === "highlight") {
+            const focusComponent = document.createElement("div");
+            focusComponent.className =
+              "wr_underline_wrapper focusMode_component";
+            focusComponent.style.cssText = `height:${lineHeight}px;
+            width:${maxWidth}px;
+            left:0;
+            top:${position}px;
+            background:${color};
+              `;
+            focusComponent.innerHTML =
+              "<div class='wr_underline wr_underline_mark'></div>";
+            divs[divs.length - 2].appendChild(focusComponent);
+          } else if (mode === "underline") {
+            const focusComponent = document.createElement("div");
+            focusComponent.className =
+              "wr_underline_wrapper wr_underline_color_3 focusMode_component";
+            focusComponent.style.cssText = `height:${lineHeight}px;
+            width:${maxWidth}px;
+            left:0;
+            top:${position}px;
+              `;
+            focusComponent.innerHTML =
+              '<div class="wr_underline wr_underline_straight"><span class="wr_underline_straight_start"></span><span class="wr_underline_straight_middle"></span><span class="wr_underline_straight_end"></span></div>';
+            divs[divs.length - 2].appendChild(focusComponent);
+          } else if (mode === "linefocus") {
+            if (color === "black") {
+              alert("深色背景下，聚焦模式不可用");
+            } else {
+              const focusComponent_mask = document.createElement("div");
+              focusComponent_mask.className = "focusMode_component focusMask";
+              focusComponent_mask.style.cssText = `
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: rgba(0, 0, 0, 0);
+              z-index: 10;
+              pointer-events: none;
+              `;
+
+              const focusComponent_read = document.createElement("div");
+              focusComponent_read.className = "focusMode_component focusRead";
+              focusComponent_read.style.cssText = `
+              position: absolute;
+              top: ${position + 2 * lineHeight}px; 
+              left: 0;
+              width: 100%;
+              height: ${lineHeight}px; 
+              box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.75); 
+              pointer-events: none;
+            `;
+
+              const body = document.querySelector("body");
+              body.appendChild(focusComponent_mask);
+              body.appendChild(focusComponent_read);
+            }
+          }
+        }
+
+        function focusControl(mode, position, rowHeight, sectionHeight) {
+          let read_bar;
+          if (mode === "linefocus") {
+            read_bar = document.querySelector(".focusRead");
+          } else {
+            read_bar = document.querySelector(".focusMode_component");
+          }
+          function handleKeydown(e) {
+            if (e.key === "x" || e.key === "X") {
+              position += rowHeight;
+              read_bar.style.top = position + "px";
+              window.scrollBy(0, rowHeight);
+            }
+            if (e.key === "S" || e.key === "s") {
+              position -= rowHeight;
+              read_bar.style.top = position + "px";
+              window.scrollBy(0, -rowHeight);
+            }
+            if (e.key === "C" || e.key === "c") {
+              position += sectionHeight;
+              read_bar.style.top = position + "px";
+              window.scrollBy(0, sectionHeight);
+            }
+            if (e.key === "D" || e.key === "d") {
+              position -= sectionHeight;
+              read_bar.style.top = position + "px";
+              window.scrollBy(0, -sectionHeight);
+            }
+            if (e.key === "v" || e.key === "V") {
+              position += 5;
+              read_bar.style.top = position + "px";
+              window.scrollBy(0, 5);
+            }
+            if (e.key === "F" || e.key === "f") {
+              position -= 5;
+              read_bar.style.top = position + "px";
+              window.scrollBy(0, -5);
+            }
+            if ((e.key === "z" || e.key === "Z") && mode === "linefocus") {
+              if (read_bar.style.opacity == "1") {
+                read_bar.style.opacity = "0";
+              } else {
+                read_bar.style.opacity = "1";
+              }
+            }
+          }
+          window.addEventListener("keydown", handleKeydown);
+          return function removeEventListener() {
+            window.removeEventListener("keydown", handleKeydown);
+          };
+        }
+
+        function turnoffFocus() {
+          focusButton.classList.remove("selected");
+          removefocusControl();
+          const focusComponent = document.querySelectorAll(
+            ".focusMode_component"
+          );
+          focusComponent.forEach((item) => {
+            item.remove();
+          });
+        }
+
+        function turnonFocus() {
+          focusButton.classList.add("selected");
+          if (!calcHeight()) {
+            focusButton.classList.remove("selected");
+            return;
+          }
+          let [rowHeight, sectionHeight, sectionWidth, position, lineHeight] =
+            calcHeight();
+
+          let color;
+          let mode;
+          chrome.storage.local.get(["wread-bgcolor"]).then((res) => {
+            const bgcolor =
+              res["weread-bgcolor"] === undefined
+                ? "white"
+                : res["weread-bgcolor"];
+            color = focusColor(bgcolor);
+          });
+          chrome.storage.local.get(["weread-focusMode"]).then((res) => {
+            mode =
+              res["weread-focusMode"] === undefined
+                ? "highlight"
+                : res["weread-focusMode"];
+          });
+
+          setTimeout(() => {
+            creatFocusComponent(
+              mode,
+              color,
+              sectionWidth,
+              position,
+              lineHeight
+            );
+            removefocusControl = focusControl(
+              mode,
+              position,
+              rowHeight,
+              sectionHeight
+            );
+          }, 200);
+
+          chrome.runtime.onMessage.addListener((message) => {
+            if (message.fontSize || message.pageWidth || message.autoSpeed)
+              turnoffFocus();
+            else if (message.focusMode) {
+              let focusComponent;
+              if (mode === "linefocus") {
+                focusComponent = document.querySelector(".focusRead");
+              } else {
+                focusComponent = document.querySelector(".focusMode_component");
+              }
+              position = parseInt(focusComponent.style.top);
+              mode = message.focusMode;
+              console.log(mode);
+              color = "rgba(65, 134, 230, 0.3)";
+              turnoffFocus();
+              focusButton.classList.add("selected");
+              setTimeout(() => {
+                creatFocusComponent(
+                  mode,
+                  color,
+                  sectionWidth,
+                  position,
+                  lineHeight
+                );
+                removefocusControl = focusControl(
+                  mode,
+                  position,
+                  rowHeight,
+                  sectionHeight
+                );
+              }, 50);
+            }
+          });
+        }
+
+        if (focusButton.classList.contains("selected")) {
+          turnoffFocus();
+        } else {
+          turnonFocus();
+        }
+      });
+    }
+  }
+
   // copy dict content
-  if (readerTp != "P") {
+  if (readerTp === "H") {
     const dictHeader = document.querySelector(
       ".reader_float_search_panel_wrapper .reader_float_panel_header"
     );
@@ -987,7 +997,6 @@ window.onload = function () {
     copyBtn.addEventListener("click", () => {
       let m = document.querySelector(".reader_float_search_panel_action_means");
       if (m) {
-        console.log("clicked");
         let text = "";
         Array.from(m.children).forEach((child) => {
           text += child.innerText + "\n";
