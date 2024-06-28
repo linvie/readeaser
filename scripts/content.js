@@ -57,13 +57,13 @@ document.addEventListener("DOMContentLoaded", function () {
     style.id = "bgcolorSetting";
     style.innerHTML = `
         .wr_whiteTheme {background-color: ${bgcolor} !important;}
-        .wr_whiteTheme .app_content,
         .wr_whiteTheme .readerTopBar,
         .wr_whiteTheme .readerCatalog,
-        .wr_whiteTheme .readerControls_item {background-color: ${color} !important;}
+        .wr_whiteTheme .readerControls_item {background-color: ${color};}
         .readerChapterContent {color: ${fontColor} !important;}
         `;
     document.head.appendChild(style);
+    document.querySelector(".app_content").style.backgroundColor = color;
     changeFontColor(fontColor);
   }
 
@@ -101,12 +101,14 @@ document.addEventListener("DOMContentLoaded", function () {
     style.innerHTML = `
         .wr_whiteTheme .readerTopBar,
         .wr_whiteTheme .wr_horizontalReader .readerChapterContent_container {background-color: ${bgcolor} !important;}
-        .wr_horizontalReader .readerChapterContent,
         .wr_horizontalReader .readerCatalog,
-        .wr_whiteTheme .readerControls_item {background-color: ${color} !important;}
+        .wr_whiteTheme .readerControls_item {background-color: ${color} ;}
         .readerChapterContent {color: ${fontColor} !important;}
         `;
     document.head.appendChild(style);
+    document.querySelector(
+      ".wr_horizontalReader .readerChapterContent"
+    ).style.backgroundColor = color;
     changeFontColor(fontColor);
   }
 
@@ -449,6 +451,9 @@ document.addEventListener("DOMContentLoaded", function () {
         // .readerContent .app_content{max-width:${value}vw !important;}
         `;
       document.head.appendChild(style);
+      document.querySelector(
+        ".wr_horizontalReader .readerChapterContent"
+      ).style.maxWidth = "100vw";
     }
   }
 
@@ -468,6 +473,9 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       injectPageWidthCss(message.pageWidth);
       activeSetting();
+      if (readerTp === "N") {
+        window.location.reload();
+      }
     }
   });
 
@@ -490,13 +498,22 @@ document.addEventListener("DOMContentLoaded", function () {
         afterScrollTop >= scrollHeight ||
         afterScrollTop === beforeScrollTop
       ) {
-        const event = new KeyboardEvent("keydown", {
-          key: "ArrowRight",
-          keyCode: 39,
-        });
-        document.dispatchEvent(event);
+        resetAutoScroll();
+        setTimeout(() => {
+          nextPage();
+          setTimeout(() => autoScroll(time), time * 100);
+        }, time * 100);
       }
     }, time);
+  }
+
+  function nextPage() {
+    const event = new KeyboardEvent("keydown", {
+      key: "ArrowRight",
+      keyCode: 39,
+    });
+    document.dispatchEvent(event);
+    console.log("next");
   }
 
   function resetAutoScroll() {
@@ -528,9 +545,217 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   }
+
+  window.onload = () => {
+    loadedFeature();
+
+    chrome.storage.local.get(["readeaser_theme"]).then((res) => {
+      const theme = res["readeaser_theme"];
+      chrome.runtime.sendMessage(
+        { action: "getTheme", themeName: theme },
+        (response) => {
+          if (response.data) {
+            const blob = base64ToBlob(response.data, "application/json");
+            readBlobAsJson(blob).then((data) => {
+              if (data) {
+                console.log(data);
+                //font
+                const font = data.fontFamily;
+                if (font) {
+                  const fontFaceExists = [...document.fonts].some(
+                    (fontFace) => fontFace.family === font
+                  );
+
+                  if (fontFaceExists) {
+                    const fontFamilySetting =
+                      document.getElementById("fontFamilySetting");
+                    changeFontFamily(font, fontFamilySetting);
+                  } else {
+                    chrome.runtime.sendMessage(
+                      { action: "getFont", fontName: font },
+                      (response) => {
+                        if (response.data) {
+                          const newFontFace = new FontFace(
+                            font,
+                            `url(${response.data})`
+                          );
+                          newFontFace
+                            .load()
+                            .then((loadedFace) => {
+                              document.fonts.add(loadedFace);
+                              const fontFamilySetting =
+                                document.getElementById("fontFamilySetting");
+                              changeFontFamily(font, fontFamilySetting);
+
+                              //active setting
+                              activeSetting();
+                              // function simulateKeyPress(keyCode) {
+                              //   const event = new KeyboardEvent("keydown", {
+                              //     key:
+                              //       keyCode === 39 ? "ArrowRight" : "ArrowLeft",
+                              //     code:
+                              //       keyCode === 39 ? "ArrowRight" : "ArrowLeft",
+                              //     keyCode: keyCode,
+                              //     which: keyCode,
+                              //     bubbles: true,
+                              //     cancelable: true,
+                              //   });
+
+                              //   document.dispatchEvent(event);
+                              // }
+
+                              // simulateKeyPress(37);
+                              // simulateKeyPress(39);
+                            })
+                            .catch((error) => {
+                              console.error("Font loading failed:", error);
+                              URL.revokeObjectURL(response.fontUrl);
+                            });
+                        } else {
+                          console.error(response.error);
+                        }
+                      }
+                    );
+                  }
+                }
+
+                if (readerTp === "H") {
+                  const bgcolor = document.getElementById("bgcolorSetting");
+                  if (bgcolor) {
+                    bgcolor.parentNode.removeChild(bgcolor);
+                  }
+                  if (data.isdark) {
+                    document.body.classList.remove("wr_whiteTheme");
+                    injectColorCssHorizontal(
+                      data.fcolor,
+                      data.bcolor,
+                      "#b2b2b2"
+                    );
+                    colorLoad("black");
+                  } else {
+                    document.body.classList.add("wr_whiteTheme");
+                    injectColorCssHorizontal(
+                      data.fcolor,
+                      data.bcolor,
+                      "#1c1c1d"
+                    );
+                    colorLoad("white");
+                  }
+                  const read = document.querySelector(
+                    ".wr_horizontalReader .readerChapterContent"
+                  );
+
+                  if (data.backgroundImage) {
+                    read.style.backgroundImage = `url("${data.image}")`;
+                    read.style.backgroundRepeat = data.backgroundRepeat;
+                    read.style.backgroundPosition = "center";
+                    if (data.backgroundRepeat === "repeat") {
+                      read.style.backgroundSize = "contain";
+                    } else {
+                      read.style.backgroundSize = "cover";
+                    }
+                  }
+                } else if (readerTp === "N") {
+                  const bgcolor = document.getElementById("bgcolorSetting");
+                  if (bgcolor) {
+                    bgcolor.parentNode.removeChild(bgcolor);
+                  }
+                  if (data.isdark) {
+                    document.body.classList.remove("wr_whiteTheme");
+                    injectColorCss(data.fcolor, data.bcolor, "#b2b2b2");
+                    colorLoad("black");
+                  } else {
+                    document.body.classList.add("wr_whiteTheme");
+                    injectColorCss(data.fcolor, data.bcolor, "#1c1c1d");
+                    colorLoad("white");
+                  }
+
+                  //add mask
+                  const body = document.querySelector("body");
+                  const content = document.querySelector(".app_content");
+
+                  const contentWidth = content.offsetWidth;
+                  const bodyWidth = body.clientWidth;
+
+                  const left = (bodyWidth - contentWidth) / 2;
+
+                  const BackComponent = document.createElement("div");
+                  BackComponent.className = "BackComponent";
+                  BackComponent.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: ${left}px;
+        width: ${contentWidth}px;
+        height: 100%;
+        background: rgba(0, 0, 0, 0);
+        z-index: -1;
+    `;
+
+                  body.appendChild(BackComponent);
+
+                  const read = BackComponent;
+
+                  if (data.backgroundImage && data.backgroundImage != "none") {
+                    content.style.backgroundColor = "transparent";
+                    read.style.backgroundImage = `url("${data.image}")`;
+                    read.style.backgroundRepeat = data.backgroundRepeat;
+                    read.style.backgroundPosition = "center";
+                    if (data.backgroundRepeat === "repeat") {
+                      read.style.backgroundSize = "contain";
+                    } else {
+                      read.style.backgroundSize = "cover";
+                    }
+                  }
+                }
+              }
+            });
+          }
+        }
+      );
+    });
+  };
 });
 
-window.onload = function () {
+function base64ToBlob(base64, contentType) {
+  const byteCharacters = atob(base64.split(",")[1]);
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+    const slice = byteCharacters.slice(offset, offset + 512);
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+
+  return new Blob(byteArrays, { type: contentType });
+}
+
+function readBlobAsJson(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = function (event) {
+      try {
+        const jsonString = event.target.result;
+        const data = JSON.parse(jsonString);
+        resolve(data);
+      } catch (error) {
+        reject(error);
+      }
+    };
+
+    reader.onerror = function (event) {
+      reject(new Error("读取 Blob 文件时发生错误"));
+    };
+
+    reader.readAsText(blob);
+  });
+}
+
+function loadedFeature() {
   //remove button
   const wetype = document.querySelector(".wetype");
   if (wetype) {
@@ -1079,4 +1304,4 @@ window.onload = function () {
       }
     }
   }
-};
+}

@@ -1,8 +1,24 @@
+@import url("../options/style/color.css");
+@import url("./fonts.css");
+
+.normal {
+  --setboard-color: #f2f2f2;
+  --try-container: #fefefe;
+  --on-body-color: #000;
+  --primary-color: #edeeee;
+  --outline-text-color: #958c8c;
+  --on-primary-container-color: #000;
+  --textboard-color: #f2f2f2;
+  --input-right: #f8f9f9;
+  --on-primary-color: #000;
+}
+
 html,
 body {
   margin: 0;
   padding: 0;
-  background: #f2f2f2;
+  background: var(--setboard-color);
+  /* background: #f2f2f2; */
 }
 
 .options {
@@ -13,7 +29,8 @@ body {
   width: 335px;
   height: 400px;
   border-radius: 10px;
-  background: #fefefe;
+  background: var(--try-container);
+  /* background: #fefefe; */
 }
 
 .h1 {
@@ -21,7 +38,8 @@ body {
   width: 102px;
   height: 25px;
   flex-shrink: 0;
-  color: #000;
+  /* color: #000; */
+  color: var(--on-body-color);
   font-family: "SourceHanSansCN";
   font-size: 20px;
   font-style: normal;
@@ -34,7 +52,8 @@ h3 {
   width: 77px;
   height: 17px;
   flex-shrink: 0;
-  color: #000;
+  /* color: #000; */
+  color: var(--on-body-color);
   font-family: "SourceHanSerifCN";
   font-size: 12px;
   font-style: normal;
@@ -44,7 +63,8 @@ h3 {
 
 .gray {
   display: inline;
-  color: #958c8c;
+  /* color: #958c8c; */
+  color: var(--outline-text-color);
 }
 
 .weread {
@@ -70,9 +90,10 @@ h3 {
   flex-direction: column;
   justify-content: center;
   border-radius: 5px;
-  background: #f2f2f2;
-  flex-shrink: 0;
-  color: #000;
+  /* background: #f2f2f2; */
+  background: var(--textboard-color);
+  /* color: #000; */
+  color: var(--on-primary-container-color);
   text-align: center;
   font-family: "SourceHanSerifCN";
   font-size: 14px;
@@ -94,11 +115,16 @@ h3 {
   align-items: center;
 }
 select {
-  background: #f2f2f2;
-  border-radius: 10px;
+  /* background: #f2f2f2; */
+  background: var(--textboard-color);
+  height: 30px !important;
+  border-radius: 15px;
+  cursor: pointer;
+  appearance: none;
+  text-align: center;
 }
 select:hover {
-  background-color: #e8e8e8;
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .TsangerYunHei {
@@ -242,7 +268,8 @@ input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
   border-radius: 10px;
-  background: #f8f9f9;
+  /* background: #f8f9f9; */
+  background: var(--input-right);
 }
 
 input[type="range"]::-webkit-slider-runnable-track {
@@ -273,11 +300,14 @@ input[type="range"]::-webkit-slider-thumb {
   height: 29px;
   border-radius: 5px;
   display: inline-block;
-  background: #f8f9f9;
+  /* background: #f8f9f9; */
+  background: var(--textboard-color);
 }
 
 .dyslexia input[type="radio"]:checked {
-  background-color: #edeeee;
+  /* background-color: #edeeee; */
+  background-color: var(--primary-color);
+  color: var(--on-primary-color);
 }
 
 #highlight {
@@ -332,22 +362,50 @@ a {
 }
 
 .footer {
-  margin-top: 22px;
+  margin-top: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  text-align: center;
+}
+
+.footer div {
+  cursor: pointer;
+  height: 24px;
+  width: 24px;
 }
 
 .version {
+  /* flex: 1; */
   display: flex;
   margin: 0 auto;
   width: 53px;
-  height: 16px;
+  height: 24px;
   flex-direction: column;
   justify-content: center;
-  flex-shrink: 0;
-  color: #958c8c;
+  color: var(--outline-text-color);
   text-align: center;
   font-family: "SourceHanSerifCN";
   font-size: 12px;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
+}
+
+.settings {
+  margin-left: 50px;
+  background: url("../image/icons/settings.svg");
+}
+
+.sync {
+  margin-right: 35px;
+  background: url("../image/icons/unsync.svg");
+}
+
+.sync.on {
+  background: url("../image/icons/sync.svg");
+}
+
+.version a {
+  color: var(--outline-text-color);
 }

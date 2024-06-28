@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const percentage =
       ((((value - min) / (max - min)) * 13) / 15 + 1 / 15) * 100;
 
-    range.style.background = `linear-gradient(to right, #EDEEEE ${percentage}%, #F8F9F9 ${percentage}%)`;
+    range.style.background = `linear-gradient(to right, var(--primary-color) ${percentage}%, var(--input-right) ${percentage}%)`;
   }
 
   function realTimeColor(el) {
@@ -179,4 +179,37 @@ document.addEventListener("DOMContentLoaded", (event) => {
       };
     })();
   }
+
+  //option_page
+  const sync = document.querySelector(".sync");
+  sync.addEventListener("click", () => {
+    sync.classList.toggle("on");
+    if (sync.classList.contains("on")) {
+      if (document.querySelector("body").classList.contains("normal")) {
+        document.querySelector("body").classList.remove("normal");
+        document.querySelector("body").classList.add("light_default_contrast");
+        // location.reload();
+      }
+    } else {
+      if (
+        document
+          .querySelector("body")
+          .classList.contains("light_default_contrast")
+      ) {
+        document
+          .querySelector("body")
+          .classList.remove("light_default_contrast");
+        document.querySelector("body").classList.add("normal");
+        // location.reload();
+      }
+    }
+  });
+
+  document.querySelector(".settings").addEventListener("click", () => {
+    if (chrome.runtime.openOptionsPage) {
+      chrome.runtime.openOptionsPage();
+    } else {
+      window.open(chrome.runtime.getURL("../options/index.html"));
+    }
+  });
 });

@@ -1,0 +1,193 @@
+@import url("./material-colors.css");
+
+.light_default_contrast {
+  --body-color: var(--light-default-surface-dim);
+  --content-color: var(--light-default-surface-container-lowest);
+  --textboard-color: var(--light-default-primary-container);
+  --setboard-color: var(--light-default-surface-container-low);
+  --colorbutton-bg-color: var(--light-default-secondary-fixed);
+  --colorbutton-color: var(--light-default-on-secondary-fixed);
+  --colorbutton-bg-hover-color: var(--light-default-secondary-fixed-dim);
+  --on-button-color: var(--light-default-on-tertiary-container);
+  --botton-bg-color: var(--light-default-tertiary-container);
+  --botton-bg-hover-color: var(--light-default-tertiary-fixed-dim);
+  --on-button-checked-color: var(--light-default-on-tertiary);
+  --botton-bg-checked-color: var(--light-default-tertiary);
+  --botton-bg-checked-hover-color: var(
+    --light-default-on-tertiary-fixed-variant
+  );
+  --addbutton-container-color: var(--light-default-secondary-container);
+  --addbutton-container-hover-color: var(--light-default-secondary-fixed-dim);
+  --addbutton-color: var(--light-default-secondary);
+  --outline-text-color: var(--light-default-outline);
+  --on-body-color: var(--light-default-on-surface);
+  --donate-bg-color: var(--light-default-surface-container-highest);
+  --mode-board-bg-color: var(--light-default-surface);
+
+  --primary-color: var(--light-default-primary);
+  --on-primary-color: var(--light-default-on-primary);
+  --on-primary-container-color: var(--light-default-on-primary-container);
+
+  --try-on-container: var(--light-default-inverse-primary);
+  --try-container: var(--light-default-surface-container);
+
+  --input-right: var(--light-default-primary-container);
+}
+
+.light_medium_contrast {
+  --body-color: var(--light-medium-surface-dim);
+  --content-color: var(--light-medium-surface-container-lowest);
+  --textboard-color: var(--light-medium-primary-container);
+  --setboard-color: var(--light-medium-surface-container-low);
+  --colorbutton-bg-color: var(--light-medium-secondary-fixed-dim);
+  --colorbutton-color: var(--light-medium-on-secondary-fixed);
+  --colorbutton-bg-hover-color: var(--light-medium-secondary-fixed-dim);
+  --on-button-color: var(--light-medium-on-tertiary-container);
+  --botton-bg-color: var(--light-medium-tertiary-container);
+  --botton-bg-hover-color: var(--light-medium-tertiary-fixed-dim);
+  --on-button-checked-color: var(--light-medium-on-tertiary);
+  --botton-bg-checked-color: var(--light-medium-tertiary);
+  --botton-bg-checked-hover-color: var(
+    --light-medium-on-tertiary-fixed-variant
+  );
+  --addbutton-container-color: var(--light-medium-secondary-container);
+  --addbutton-container-hover-color: var(--light-medium-secondary-fixed-dim);
+  --addbutton-color: var(--light-medium-secondary);
+  --outline-text-color: var(--light-medium-outline);
+  --on-body-color: var(--light-medium-on-surface);
+  --donate-bg-color: var(--light-medium-surface-container-highest);
+  --mode-board-bg-color: var(--light-medium-surface);
+
+  --primary-color: var(--light-medium-primary);
+  --on-primary-color: var(--light-medium-on-primary);
+  --on-primary-container-color: var(--light-medium-on-primary-container);
+
+  --try-on-container: var(--light-medium-inverse-primary);
+  --try-container: var(--light-medium-surface-container);
+}
+
+.light_high_contrast {
+  --body-color: var(--light-high-surface-dim);
+  --content-color: var(--light-high-surface-container-lowest);
+  --textboard-color: var(--light-high-primary-container);
+  --setboard-color: var(--light-high-surface-container-low);
+  --colorbutton-bg-color: var(--light-high-secondary-fixed-dim);
+  --colorbutton-color: var(--light-high-on-secondary-fixed);
+  --colorbutton-bg-hover-color: var(--light-high-secondary-fixed-dim);
+
+  --on-button-color: var(--light-high-on-tertiary-container);
+  --botton-bg-color: var(--light-high-tertiary-container);
+  --botton-bg-hover-color: var(--light-high-tertiary-fixed-dim);
+  --on-button-checked-color: var(--light-high-on-tertiary);
+  --botton-bg-checked-color: var(--light-high-tertiary);
+  --botton-bg-checked-hover-color: var(--light-high-on-tertiary-fixed-variant);
+  --addbutton-container-color: var(--light-high-secondary-container);
+  --addbutton-container-hover-color: var(--light-high-secondary-fixed-dim);
+  --addbutton-color: var(--light-high-secondary);
+  --outline-text-color: var(--light-high-outline);
+  --on-body-color: var(--light-high-on-surface);
+  --donate-bg-color: var(--light-high-surface-container-highest);
+  --mode-board-bg-color: var(--light-high-surface);
+
+  --primary-color: var(--light-high-primary);
+  --on-primary-color: var(--light-high-on-primary);
+  --on-primary-container-color: var(--light-high-on-primary-container);
+
+  --try-on-container: var(--light-high-inverse-primary);
+  --try-container: var(--light-high-surface-container);
+}
+
+.dark_default_contrast {
+  --body-color: var(--dark-default-surface-dim);
+  --content-color: var(--dark-default-surface-container-lowest);
+  --textboard-color: var(--dark-default-primary-container);
+  --setboard-color: var(--dark-default-surface-container-low);
+  --colorbutton-bg-color: var(--dark-default-secondary-fixed-dim);
+  --colorbutton-color: var(--dark-default-on-secondary-fixed);
+  --colorbutton-bg-hover-color: var(--dark-default-secondary-fixed-dim);
+
+  --on-button-color: var(--dark-default-on-tertiary-container);
+  --botton-bg-color: var(--dark-default-tertiary-container);
+  --botton-bg-hover-color: var(--dark-default-tertiary-fixed-dim);
+  --on-button-checked-color: var(--dark-default-on-tertiary);
+  --botton-bg-checked-color: var(--dark-default-tertiary);
+  --botton-bg-checked-hover-color: var(
+    --dark-default-on-tertiary-fixed-variant
+  );
+  --addbutton-container-color: var(--dark-default-secondary-container);
+  --addbutton-container-hover-color: var(--dark-default-secondary-fixed-dim);
+  --addbutton-color: var(--dark-default-secondary);
+  --outline-text-color: var(--dark-default-outline);
+  --on-body-color: var(--dark-default-on-surface);
+  --donate-bg-color: var(--dark-default-surface-container-highest);
+  --mode-board-bg-color: var(--dark-default-surface);
+
+  --primary-color: var(--dark-default-primary);
+  --on-primary-color: var(--dark-default-on-primary);
+  --on-primary-container-color: var(--dark-default-on-primary-container);
+
+  --try-on-container: var(--dark-default-inverse-primary);
+  --try-container: var(--dark-default-surface-container);
+}
+
+.dark_medium_contrast {
+  --body-color: var(--dark-medium-surface-dim);
+  --content-color: var(--dark-medium-surface-container-lowest);
+  --textboard-color: var(--dark-medium-primary-container);
+  --setboard-color: var(--dark-medium-surface-container-low);
+  --colorbutton-bg-color: var(--dark-medium-secondary-fixed-dim);
+  --colorbutton-color: var(--dark-medium-on-secondary-fixed);
+  --colorbutton-bg-hover-color: var(--dark-medium-secondary-fixed-dim);
+
+  --on-button-color: var(--dark-medium-on-tertiary-container);
+  --botton-bg-color: var(--dark-medium-tertiary-container);
+  --botton-bg-hover-color: var(--dark-medium-tertiary-fixed-dim);
+  --on-button-checked-color: var(--dark-medium-on-tertiary);
+  --botton-bg-checked-color: var(--dark-medium-tertiary);
+  --botton-bg-checked-hover-color: var(--dark-medium-on-tertiary-fixed-variant);
+  --addbutton-container-color: var(--dark-medium-secondary-container);
+  --addbutton-container-hover-color: var(--dark-medium-secondary-fixed-dim);
+  --addbutton-color: var(--dark-medium-secondary);
+  --outline-text-color: var(--dark-medium-outline);
+  --on-body-color: var(--dark-medium-on-surface);
+  --donate-bg-color: var(--dark-medium-surface-container-highest);
+  --mode-board-bg-color: var(--dark-medium-surface);
+
+  --primary-color: var(--dark-medium-primary);
+  --on-primary-color: var(--dark-medium-on-primary);
+  --on-primary-container-color: var(--dark-medium-on-primary-container);
+
+  --try-on-container: var(--dark-medium-inverse-primary);
+  --try-container: var(--dark-medium-surface-container);
+}
+
+.dark_high_contrast {
+  --body-color: var(--dark-high-surface-dim);
+  --content-color: var(--dark-high-surface-container-lowest);
+  --textboard-color: var(--dark-high-primary-container);
+  --setboard-color: var(--dark-high-surface-container-low);
+  --colorbutton-bg-color: var(--dark-high-secondary-fixed-dim);
+  --colorbutton-color: var(--dark-high-on-secondary-fixed);
+  --colorbutton-bg-hover-color: var(--dark-high-secondary-fixed-dim);
+
+  --on-button-color: var(--dark-high-on-tertiary-container);
+  --botton-bg-color: var(--dark-high-tertiary-container);
+  --botton-bg-hover-color: var(--dark-high-tertiary-fixed-dim);
+  --on-button-checked-color: var(--dark-high-on-tertiary);
+  --botton-bg-checked-color: var(--dark-high-tertiary);
+  --botton-bg-checked-hover-color: var(--dark-high-on-tertiary-fixed-variant);
+  --addbutton-container-color: var(--dark-high-secondary-container);
+  --addbutton-container-hover-color: var(--dark-high-secondary-fixed-dim);
+  --addbutton-color: var(--dark-high-secondary);
+  --outline-text-color: var(--dark-high-outline);
+  --on-body-color: var(--dark-high-on-surface);
+  --donate-bg-color: var(--dark-high-surface-container-highest);
+  --mode-board-bg-color: var(--dark-high-surface);
+
+  --primary-color: var(--dark-high-primary);
+  --on-primary-color: var(--dark-high-on-primary);
+  --on-primary-container-color: var(--dark-high-on-primary-container);
+
+  --try-on-container: var(--dark-high-inverse-primary);
+  --try-container: var(--dark-high-surface-container);
+}

@@ -2,7 +2,7 @@
     "name": "readeaser",
     "author": "linvie",
     "description": "微信读书网页版美化",
-    "version": "1.1.4",
+    "version": "1.2.0",
     "manifest_version": 3,
     "action": {
         "default_icon": {
@@ -20,6 +20,7 @@
     "background": {
         "service_worker": "scripts/background.js"
     },
+    "options_page": "./options/index.html",
     "content_scripts": [
         {
             "matches": [
@@ -46,7 +47,9 @@
             ],
             "resources": [
                 "image/**",
-                "fonts/*"
+                "fonts/*",
+                "options/image/**",
+                "options/style/*"
             ]
         }
     ]
