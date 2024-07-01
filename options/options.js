@@ -6588,6 +6588,7 @@ ClickMap(".fontbutton", "#fontUpload");
 ClickMap(".colorbutton", ".inputcolor");
 ClickMap(".github", ".githublink");
 ClickMap(".xhs", ".xhslink");
+ClickMap(".support", ".supportlink");
 
 function ClickMap(button, link) {
   document.querySelector(button).addEventListener("click", () => {
