@@ -1002,7 +1002,7 @@ function loadedFeature() {
               `;
             focusComponent.innerHTML =
               "<div class='wr_underline wr_underline_mark'></div>";
-            divs[divs.length - 2].appendChild(focusComponent);
+            divs[divs.length - 3].appendChild(focusComponent);
           } else if (mode === "underline") {
             const focusComponent = document.createElement("div");
             focusComponent.className =
@@ -1014,7 +1014,7 @@ function loadedFeature() {
               `;
             focusComponent.innerHTML =
               '<div class="wr_underline wr_underline_straight"><span class="wr_underline_straight_start"></span><span class="wr_underline_straight_middle"></span><span class="wr_underline_straight_end"></span></div>';
-            divs[divs.length - 2].appendChild(focusComponent);
+            divs[divs.length - 3].appendChild(focusComponent);
           } else if (mode === "linefocus") {
             if (color === "black") {
               alert("深色背景下，聚焦模式不可用");

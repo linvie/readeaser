@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   selectElement.addEventListener("change", (e) => {
     const value = e.target.value;
-    chrome.storage.local.set({ "weread-fontFamily": value });
+    if(value != "addfont"){chrome.storage.local.set({ "weread-fontFamily": value });
     chrome.tabs
       .query({ active: true, currentWindow: true })
       .then((tabs) => {
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       })
       .catch((error) => {
         console.error("An error occurred: " + error);
-      });
+      });}
   });
 
   //background

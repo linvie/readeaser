@@ -122,10 +122,16 @@ select {
   cursor: pointer;
   appearance: none;
   text-align: center;
+  
 }
-select:hover {
+
+select:focus {
+  outline: none;
+}
+
+/* select:hover {
   background-color: rgba(0, 0, 0, 0.3);
-}
+} */
 
 .TsangerYunHei {
   font-family: "TsangerYunHei";
