@@ -307,11 +307,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const style = document.createElement("style");
     style.id = "topbarSetting";
     style.innerHTML = `
-        .wr_horizontalReader .readerChapterContent {margin-top: ${
-          72 - value
-        }px !important; height:calc(100% - ${
-      132 - (92 * value) / 52
-    }px) !important}
+        .wr_horizontalReader .readerChapterContent {margin-top: ${72 - value
+      }px !important; height:calc(100% - ${132 - (92 * value) / 52
+      }px) !important}
         .readerTopBar {height: ${72 - value}px !important;}
         `;
     document.head.appendChild(style);
@@ -444,8 +442,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const style = document.createElement("style");
       style.id = "pagewidthSetting";
       style.innerHTML = `
-        .wr_horizontalReader .readerChapterContent {width: ${
-          75 + ((value - 60) / 40) * 23
+        .wr_horizontalReader .readerChapterContent {width: ${75 + ((value - 60) / 40) * 23
         }vw !important;}
         // .readerTopBar {max-width: ${value}vw !important;}
         // .readerContent .app_content{max-width:${value}vw !important;}
@@ -756,6 +753,119 @@ function readBlobAsJson(blob) {
 }
 
 function loadedFeature() {
+  //localfonts
+  async function creatList() {
+    const fontlist = document.createElement("div")
+    fontlist.classList.add("fontlist")
+    fontlist.style.cssText =
+      `
+        width:60%;
+        height:60%;
+        top:20%;
+        left:20%;
+        overflow: auto;
+        position: fixed;
+        background-color: #D3EFD1;
+        z-index: 10;
+        box-shadow: -20px 20px 20px 0 rgba(0, 0, 0, .1);
+        `;
+    const textarea = document.createElement("textarea");
+    textarea.classList.add("fontSettingPreview")
+    textarea.style.cssText =
+      `
+                width: 90%;
+                height: 80px;
+                margin: 10px 3%;
+                padding: 20px 2%;
+                border-radius: 5%;
+                background-color: rgba(13, 20, 30, .04);
+                appearance:none;
+                font-size:24px;
+                resize:none;
+                font-family:Founderkai !important;
+                overflow: hidden;
+              `;
+    textarea.value = `人生无根蒂，飘如陌上尘。
+分散逐风转，此已非常身。`
+
+    const selectDiv = document.createElement("div");
+    selectDiv.style.cssText =
+      `
+                width: 100%;
+                height: 80%;
+              `;
+
+    fontlist.appendChild(textarea);
+    fontlist.appendChild(selectDiv);
+
+    function createFontOption(name, family, style) {
+      const text = document.querySelector(".fontSettingPreview")
+      let previewText;
+      if (text) {
+        previewText = text.value.replace(/\n/g, "");
+      } else {
+        previewText = `人生无根蒂，飘如陌上尘。分散逐风转，此已非常身。`
+      }
+      const optionDiv = document.createElement("div");
+      // optionDiv.classList.add(family)
+      optionDiv.style.cssText = `
+      height: 80px;
+      margin: 0 3%;
+      padding: 0 2%;
+      border-bottom: .5px solid #dadce0;
+      color:#000;
+      `
+      optionDiv.innerHTML = `
+      <div
+    class="font_header"
+    style="height: 16px; margin-bottom: 8px; font-size: 14px;"
+  >
+    <h1 style="margin-right: 5px;display: inline-block;"><b>${name}</b></h1>
+    <span style="margin-right: 5px">${style}</span>
+    <span>| readeaser </span>
+  </div>
+  <div
+    class="previewText"
+    style="height: 54px; line-height: 54px; font-size: 24px; overflow: hidden;font-family: ${family} !important"
+  >
+    ${previewText}
+  </div>
+      `
+      optionDiv.addEventListener('mouseover', function () {
+        this.style.backgroundColor = "rgba(0,0,0,.1)";
+        this.style.cursor = "pointer";
+      });
+
+      optionDiv.addEventListener('mouseout', function () {
+        this.style.backgroundColor = '';
+      });
+
+      return optionDiv
+    }
+
+    const data = await window.queryLocalFonts();
+    if (data) {
+      data.forEach(item => {
+        // console.log(item.fullName, item.family, item.style)
+        const optionDiv = createFontOption(item.fullName, item.family, item.style)
+        selectDiv.appendChild(optionDiv);
+      });
+      const body = document.querySelector("body");
+      body.appendChild(fontlist);
+    } else {
+      console.error("Can't reach localfont")
+    }
+
+  }
+  chrome.runtime.onMessage.addListener(function (message) {
+    const list = document.querySelector(".fontlist");
+    if (!list) {
+      if (message.message === "localfont") {
+        creatList();
+      }
+    }
+  });
+
   //remove button
   const wetype = document.querySelector(".wetype");
   if (wetype) {

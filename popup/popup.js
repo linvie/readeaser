@@ -23,17 +23,30 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   selectElement.addEventListener("change", (e) => {
     const value = e.target.value;
-    if(value != "addfont"){chrome.storage.local.set({ "weread-fontFamily": value });
-    chrome.tabs
-      .query({ active: true, currentWindow: true })
-      .then((tabs) => {
-        chrome.tabs.sendMessage(tabs[0].id, { fontFamily: value }, () => {
-          console.log("send to" + tabs[0].id + { fontFamily: value });
+    if (value != "addfont") {
+      chrome.storage.local.set({ "weread-fontFamily": value });
+      chrome.tabs
+        .query({ active: true, currentWindow: true })
+        .then((tabs) => {
+          chrome.tabs.sendMessage(tabs[0].id, { fontFamily: value }, () => {
+            console.log("send to" + tabs[0].id + { fontFamily: value });
+          });
+        })
+        .catch((error) => {
+          console.error("An error occurred: " + error);
         });
-      })
-      .catch((error) => {
-        console.error("An error occurred: " + error);
-      });}
+    } else {
+      chrome.tabs
+        .query({ active: true, currentWindow: true })
+        .then((tabs) => {
+          chrome.tabs.sendMessage(tabs[0].id, { message: "localfont" }, () => {
+            console.log("sended!");
+          });
+        })
+        .catch((error) => {
+          console.error("An error occurred: " + error);
+        });
+    }
   });
 
   //background
