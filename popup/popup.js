@@ -195,12 +195,26 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   //option_page
   const sync = document.querySelector(".sync");
+  chrome.storage.local.get(["readeaser-sync"]).then((res) => {
+    const syncColor = res["readeaser-sync"] || "sync";
+    if (syncColor === "sync") {
+      document.querySelector("body").classList.remove("normal");
+      document.querySelector("body").classList.add("light_default_contrast");
+    } else {
+      sync.classList.toggle("on");
+      document
+        .querySelector("body")
+        .classList.remove("light_default_contrast");
+      document.querySelector("body").classList.add("normal");
+    }
+  })
   sync.addEventListener("click", () => {
     sync.classList.toggle("on");
     if (sync.classList.contains("on")) {
       if (document.querySelector("body").classList.contains("normal")) {
         document.querySelector("body").classList.remove("normal");
         document.querySelector("body").classList.add("light_default_contrast");
+        chrome.storage.local.set({ "readeaser-sync": "sync" });
         // location.reload();
       }
     } else {
@@ -213,6 +227,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
           .querySelector("body")
           .classList.remove("light_default_contrast");
         document.querySelector("body").classList.add("normal");
+        chrome.storage.local.set({ "readeaser-sync": "unsync" });
         // location.reload();
       }
     }
