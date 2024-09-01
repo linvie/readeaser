@@ -204,11 +204,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     chrome.runtime.onMessage.addListener(function (message, sender) {
       const color = message.bgcolor;
-      const bgcolor = document.getElementById("bgcolorSetting");
-      changeColor(color, bgcolor);
-      colorLoad(color);
-      location.reload();
+      if (color) {
+        const bgcolor = document.getElementById("bgcolorSetting");
+        changeColor(color, bgcolor);
+        colorLoad(color);
+        window.location.reload();
 
+      }
     });
   } else if (readerTp === "H") {
     chrome.storage.local.get(["weread-bgcolor"]).then((res) => {
@@ -219,10 +221,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     chrome.runtime.onMessage.addListener(function (message, sender) {
       const color = message.bgcolor;
-      const bgcolor = document.getElementById("bgcolorSetting");
-      changeColorHorizontal(color, bgcolor);
-      colorLoad(color);
-      location.reload();
+      if (color) {
+        const bgcolor = document.getElementById("bgcolorSetting");
+        changeColorHorizontal(color, bgcolor);
+        colorLoad(color);
+        window.location.reload();
+      }
     });
   }
 
