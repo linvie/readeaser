@@ -6,15 +6,15 @@
     "manifest_version": 3,
     "action": {
         "default_icon": {
-            "128": "image/icons/icon-beta.png",
-            "48": "image/icons/icon-beta.png"
+            "128": "image/icons/icon-128.png",
+            "48": "image/icons/icon-48.png"
         },
         "default_popup": "popup/popup.html",
         "default_title": "Beautify Weread"
     },
     "icons": {
-        "128": "image/icons/icon-beta.png",
-        "48": "image/icons/icon-beta.png",
+        "128": "image/icons/icon-128.png",
+        "48": "image/icons/icon-48.png",
         "512": "image/icons/icon-512.png"
     },
     "background": {

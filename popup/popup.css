@@ -122,7 +122,6 @@ select {
   cursor: pointer;
   appearance: none;
   text-align: center;
-  
 }
 
 select:focus {
@@ -375,17 +374,18 @@ a {
   text-align: center;
 }
 
-.footer div {
+.settings,
+.sync {
   cursor: pointer;
   height: 24px;
   width: 24px;
 }
 
 .version {
-  /* flex: 1; */
   display: flex;
   margin: 0 auto;
-  width: 53px;
+  /* margin-left: 54px; */
+  width: 26.5px;
   height: 24px;
   flex-direction: column;
   justify-content: center;
@@ -397,6 +397,23 @@ a {
   font-weight: 600;
   line-height: normal;
 }
+
+/* .donate {
+  display: flex;
+  margin: 0 auto;
+  margin-right: 50px;
+  width: 50px;
+  height: 24px;
+  flex-direction: column;
+  justify-content: center;
+  color: var(--outline-text-color);
+  text-align: center;
+  font-family: "SourceHanSerifCN";
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+} */
 
 .settings {
   margin-left: 50px;
@@ -412,6 +429,7 @@ a {
   background: url("../image/icons/sync.svg");
 }
 
-.version a {
+.version a,
+.donate a {
   color: var(--outline-text-color);
 }
