@@ -593,23 +593,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                               //active setting
                               activeSetting();
-                              // function simulateKeyPress(keyCode) {
-                              //   const event = new KeyboardEvent("keydown", {
-                              //     key:
-                              //       keyCode === 39 ? "ArrowRight" : "ArrowLeft",
-                              //     code:
-                              //       keyCode === 39 ? "ArrowRight" : "ArrowLeft",
-                              //     keyCode: keyCode,
-                              //     which: keyCode,
-                              //     bubbles: true,
-                              //     cancelable: true,
-                              //   });
-
-                              //   document.dispatchEvent(event);
-                              // }
-
-                              // simulateKeyPress(37);
-                              // simulateKeyPress(39);
                             })
                             .catch((error) => {
                               console.error("Font loading failed:", error);
@@ -762,6 +745,16 @@ function readBlobAsJson(blob) {
 function loadedFeature() {
   //localfonts
   async function creatList() {
+    //color
+    let color_item;
+    if (readerTp === "N") {
+      color_item = document.querySelector(".app_content");
+    } else if (readerTp === "H") {
+      color_item = document.querySelector(".readerChapterContent");
+    }
+    let rgbColor = color_item.style.backgroundColor;
+    // let color = rgbColor.replace('rgb', 'rgba').replace(')', ', 0.4)');
+
     const fontlist = document.createElement("div")
     fontlist.classList.add("fontlist")
     fontlist.style.cssText =
@@ -772,7 +765,7 @@ function loadedFeature() {
         left:20%;
         overflow: auto;
         position: fixed;
-        background-color: #D3EFD1;
+        background-color: ${rgbColor};
         z-index: 10;
         box-shadow: -20px 20px 20px 0 rgba(0, 0, 0, .1);
         `;
@@ -785,7 +778,7 @@ function loadedFeature() {
                 margin: 10px 3%;
                 padding: 20px 2%;
                 border-radius: 5%;
-                background-color: rgba(13, 20, 30, .04);
+                background-color: rgba(0, 0, 0, .04);
                 appearance:none;
                 font-size:24px;
                 resize:none;
@@ -859,10 +852,21 @@ function loadedFeature() {
       });
       const body = document.querySelector("body");
       body.appendChild(fontlist);
+
+      const textin = document.querySelector(".fontSettingPreview")
+      if (textin) {
+        textin.addEventListener("input", (e) => {
+          let text = e.target.value;
+          text = text.replace("\n", "");
+          const options = document.querySelectorAll(".previewText")
+          options.forEach((option) => {
+            option.innerText = text;
+          })
+        })
+      }
     } else {
       console.error("Can't reach localfont")
     }
-
   }
   chrome.runtime.onMessage.addListener(function (message) {
     const list = document.querySelector(".fontlist");
