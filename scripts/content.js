@@ -207,6 +207,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const bgcolor = document.getElementById("bgcolorSetting");
       changeColor(color, bgcolor);
       colorLoad(color);
+      location.reload();
+
     });
   } else if (readerTp === "H") {
     chrome.storage.local.get(["weread-bgcolor"]).then((res) => {
@@ -220,6 +222,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const bgcolor = document.getElementById("bgcolorSetting");
       changeColorHorizontal(color, bgcolor);
       colorLoad(color);
+      location.reload();
     });
   }
 
