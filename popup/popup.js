@@ -18,7 +18,27 @@ document.addEventListener("DOMContentLoaded", (event) => {
   //font-family
   const selectElement = document.querySelector("select");
   chrome.storage.local.get(["weread-fontFamily"], (result) => {
-    selectElement.value = result["weread-fontFamily"] || "系统字体";
+    // selectElement.value = result["weread-fontFamily"] || "系统字体";
+    let font = result["weread-fontFamily"];
+    let list = [
+      "系统字体",
+      "TsangerJinKai05",
+      "TsangerYunHei",
+      "SourceHanSerifCN",
+      "SourceHanSansCN",
+      "FounderShuSong",
+      "Founderkai",
+      "ChillRoundGothic",
+      "ChillDuanHeiSong",
+      "Alipinyin"
+    ]
+    if (font && !list.includes(font)) {
+      selectElement.value = "addfont";
+    } else if (font && list.includes(font)) {
+      selectElement.value = font;
+    } else {
+      selectElement.value = "系统字体";
+    }
   });
 
   selectElement.addEventListener("change", (e) => {

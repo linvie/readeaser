@@ -177,6 +177,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   chrome.storage.local.get(["weread-fontFamily"]).then((result) => {
     const fontFamily = result["weread-fontFamily"];
+    // console.log(fontFamily);
     const fontFamilySetting = document.getElementById("fontFamilySetting");
     changeFontFamily(fontFamily, fontFamilySetting);
   });
@@ -810,7 +811,8 @@ function loadedFeature() {
         previewText = `人生无根蒂，飘如陌上尘。分散逐风转，此已非常身。`
       }
       const optionDiv = document.createElement("div");
-      // optionDiv.classList.add(family)
+      optionDiv.classList.add("localfontFamily")
+      optionDiv.dataset.family = family
       optionDiv.style.cssText = `
       height: 80px;
       margin: 0 3%;
@@ -867,6 +869,30 @@ function loadedFeature() {
           })
         })
       }
+
+      // selectlocalfont
+      const localfonts = document.querySelectorAll(".localfontFamily")
+      localfonts.forEach((font) => {
+        font.addEventListener("click", (e) => {
+          e.stopPropagation();
+          // console.log(e.currentTarget.dataset.family)
+          chrome.storage.local.set({ "weread-fontFamily": e.currentTarget.dataset.family })
+          window.location.reload();
+        })
+      })
+
+      let fontlists = document.querySelector(".fontlist")
+      if (fontlists) {
+        document.addEventListener("click", () => {
+          fontlists.remove()
+        })
+      }
+      let pretext = document.querySelector(".fontSettingPreview")
+      if (pretext) {
+        pretext.addEventListener("click", (e) => {
+          e.stopPropagation();
+        })
+      }
     } else {
       console.error("Can't reach localfont")
     }
@@ -879,6 +905,7 @@ function loadedFeature() {
       }
     }
   });
+
 
   //remove button
   const wetype = document.querySelector(".wetype");
