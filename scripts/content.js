@@ -754,6 +754,9 @@ function loadedFeature() {
     }
     let rgbColor = color_item.style.backgroundColor;
     // let color = rgbColor.replace('rgb', 'rgba').replace(')', ', 0.4)');
+    if (!rgbColor) {
+      rgbColor = "#fff"
+    }
 
     const fontlist = document.createElement("div")
     fontlist.classList.add("fontlist")
