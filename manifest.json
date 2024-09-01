@@ -2,19 +2,19 @@
     "name": "readeaser",
     "author": "linvie",
     "description": "微信读书网页版美化",
-    "version": "1.2.1",
+    "version": "1.3.0",
     "manifest_version": 3,
     "action": {
         "default_icon": {
-            "128": "image/icons/icon-128.png",
-            "48": "image/icons/icon-48.png"
+            "128": "image/icons/icon-beta.png",
+            "48": "image/icons/icon-beta.png"
         },
         "default_popup": "popup/popup.html",
         "default_title": "Beautify Weread"
     },
     "icons": {
-        "128": "image/icons/icon-128.png",
-        "48": "image/icons/icon-48.png",
+        "128": "image/icons/icon-beta.png",
+        "48": "image/icons/icon-beta.png",
         "512": "image/icons/icon-512.png"
     },
     "background": {
