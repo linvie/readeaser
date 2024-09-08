@@ -1,4 +1,5 @@
 @import url("./material-colors.css");
+@import url("../../popup/fonts.css");
 
 .light_default_contrast {
   --body-color: var(--light-default-surface-dim);
@@ -13,9 +14,7 @@
   --botton-bg-hover-color: var(--light-default-tertiary-fixed-dim);
   --on-button-checked-color: var(--light-default-on-tertiary);
   --botton-bg-checked-color: var(--light-default-tertiary);
-  --botton-bg-checked-hover-color: var(
-    --light-default-on-tertiary-fixed-variant
-  );
+  --botton-bg-checked-hover-color: var(--light-default-on-tertiary-fixed-variant);
   --addbutton-container-color: var(--light-default-secondary-container);
   --addbutton-container-hover-color: var(--light-default-secondary-fixed-dim);
   --addbutton-color: var(--light-default-secondary);
@@ -45,9 +44,7 @@
   --botton-bg-hover-color: var(--light-medium-tertiary-fixed-dim);
   --on-button-checked-color: var(--light-medium-on-tertiary);
   --botton-bg-checked-color: var(--light-medium-tertiary);
-  --botton-bg-checked-hover-color: var(
-    --light-medium-on-tertiary-fixed-variant
-  );
+  --botton-bg-checked-hover-color: var(--light-medium-on-tertiary-fixed-variant);
   --addbutton-container-color: var(--light-medium-secondary-container);
   --addbutton-container-hover-color: var(--light-medium-secondary-fixed-dim);
   --addbutton-color: var(--light-medium-secondary);
@@ -109,9 +106,7 @@
   --botton-bg-hover-color: var(--dark-default-tertiary-fixed-dim);
   --on-button-checked-color: var(--dark-default-on-tertiary);
   --botton-bg-checked-color: var(--dark-default-tertiary);
-  --botton-bg-checked-hover-color: var(
-    --dark-default-on-tertiary-fixed-variant
-  );
+  --botton-bg-checked-hover-color: var(--dark-default-on-tertiary-fixed-variant);
   --addbutton-container-color: var(--dark-default-secondary-container);
   --addbutton-container-hover-color: var(--dark-default-secondary-fixed-dim);
   --addbutton-color: var(--dark-default-secondary);
@@ -256,7 +251,7 @@ body {
   justify-content: center;
   flex-shrink: 0;
   color: var(--on-body-color);
-  font-family: "Source Han Serif CN";
+  font-family: "SourceHanSerifCN";
   font-size: 20px;
   /* font-style: normal;
   font-weight: 700; */
@@ -318,7 +313,7 @@ body {
   background: var(--textboard-color);
   color: var(--on-primary-container-color);
   text-align: center;
-  font-family: "Source Han Serif CN";
+  font-family: "SourceHanSerifCN";
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
@@ -338,7 +333,7 @@ body {
   align-items: center;
   color: var(--on-primary-container-color);
   text-align: center;
-  font-family: "Source Han Serif CN";
+  font-family: "SourceHanSerifCN";
   font-size: 12px;
   font-style: normal;
   font-weight: 700;
@@ -439,7 +434,7 @@ body {
   flex-shrink: 0;
   color: var(--outline-text-color);
   text-align: center;
-  font-family: "Source Han Serif CN";
+  font-family: "SourceHanSerifCN";
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
@@ -477,7 +472,7 @@ body {
   justify-content: center;
   color: var(--on-body-color);
   text-align: center;
-  font-family: "Source Han Serif CN";
+  font-family: "SourceHanSerifCN";
   font-size: 12px;
   font-style: normal;
   font-weight: 600;
@@ -571,7 +566,7 @@ input[type="range"]::-webkit-slider-thumb {
   cursor: pointer;
   color: var(--on-primary-container-color);
   text-align: center;
-  font-family: "Source Han Serif CN";
+  font-family: "SourceHanSerifCN";
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
@@ -864,6 +859,7 @@ a {
   display: flex;
   align-items: center;
 }
+
 .option div {
   flex: 1;
   pointer-events: none;
@@ -875,6 +871,7 @@ a {
 .color_style .option div {
   pointer-events: all;
 }
+
 .modes svg {
   margin: 0;
   margin-right: 5px;

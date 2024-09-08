@@ -56,9 +56,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const style = document.createElement("style");
     style.id = "bgcolorSetting";
     style.innerHTML = `
+        .wr_whiteTheme .reader-font-control-panel-wrapper .font-panel-content,
+        .wr_whiteTheme .reader-font-control-panel-wrapper .font-panel-content_sticky,
         .wr_whiteTheme {background-color: ${bgcolor} !important;}
         .wr_whiteTheme .readerTopBar,
         .wr_whiteTheme .readerCatalog,
+        .wr_whiteTheme .readerNotePanel,
+        .wr_whiteTheme .reader-font-control-panel-wrapper .font-panel-content-fonts .font-panel-content-fonts-item,
+         .wr_whiteTheme .reader-font-control-panel-wrapper .font-panel-content-fonts .font-panel-content-fonts-item.selected,        
+        .wr_whiteTheme .reader_font_control_slider_wrapper,
         .wr_whiteTheme .readerControls_item {background-color: ${color};}
         .readerChapterContent {color: ${fontColor} !important;}
         `;
@@ -100,8 +106,14 @@ document.addEventListener("DOMContentLoaded", function () {
     style.id = "bgcolorSetting";
     style.innerHTML = `
         .wr_whiteTheme .readerTopBar,
+        .wr_whiteTheme .reader-font-control-panel-wrapper .font-panel-content,
+        .wr_whiteTheme .reader-font-control-panel-wrapper .font-panel-content_sticky,
         .wr_whiteTheme .wr_horizontalReader .readerChapterContent_container {background-color: ${bgcolor} !important;}
         .wr_horizontalReader .readerCatalog,
+        .wr_whiteTheme .readerNotePanel,
+        .wr_whiteTheme .reader-font-control-panel-wrapper .font-panel-content-fonts .font-panel-content-fonts-item,
+         .wr_whiteTheme .reader-font-control-panel-wrapper .font-panel-content-fonts .font-panel-content-fonts-item.selected,        
+        .wr_whiteTheme .reader_font_control_slider_wrapper,
         .wr_whiteTheme .readerControls_item {background-color: ${color} ;}
         .readerChapterContent {color: ${fontColor} !important;}
         `;
@@ -184,11 +196,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   chrome.runtime.onMessage.addListener(function (message) {
     // console.log("get", message, typeof (message), message.fontFamily)
+    if(message.fontFamily){
     const fontFamily = message.fontFamily;
     const fontFamilySetting = document.getElementById("fontFamilySetting");
     if (fontFamily) {
       changeFontFamily(fontFamily, fontFamilySetting);
       activeSetting();
+    }
     }
   });
 
@@ -203,14 +217,13 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-    chrome.runtime.onMessage.addListener(function (message, sender) {
+    chrome.runtime.onMessage.addListener(function (message) {
       const color = message.bgcolor;
       if (color) {
         const bgcolor = document.getElementById("bgcolorSetting");
         changeColor(color, bgcolor);
         colorLoad(color);
         window.location.reload();
-
       }
     });
   } else if (readerTp === "H") {
@@ -220,7 +233,7 @@ document.addEventListener("DOMContentLoaded", function () {
       changeColorHorizontal(color, bgcolor);
     });
 
-    chrome.runtime.onMessage.addListener(function (message, sender) {
+    chrome.runtime.onMessage.addListener(function (message) {
       const color = message.bgcolor;
       if (color) {
         const bgcolor = document.getElementById("bgcolorSetting");
@@ -255,61 +268,97 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   if (readerTp != "P") {
-    const isexpand = document.getElementsByClassName("readerControls_fontSize");
+    const isexpand = document.getElementsByClassName("fontSizeButton");
     if (isexpand) {
-      isexpand[0].style.opacity = 0;
+      // isexpand[0].style.opacity = 0;
+      // isexpand[0].style.display = "none";
+
     }
+  }
+
+  const arrow = document.querySelector(".font-panel-content-arrow")
+  if (arrow) {
+    arrow.style.display = "none";
   }
 
   // const downloadApp = document.querySelector("button[title='下载App'");
   // downloadApp.style.display = "none";
 
+  // chrome.runtime.onMessage.addListener(function (message) {
+  //   if (message.fontSize) {
+  //     const currentSize = message.fontSize;
+  //     const slider = document.getElementsByClassName("vue-slider-dot-handle");
+  //     let dotFonts = document.querySelector("div[role='slider']");
+  //     const ariaValueNow = parseInt(dotFonts.getAttribute("aria-valuenow"), 10);
+  //     const content = document.querySelector(".readerChapterContent");
+
+  //     for (let i = 0; i < 8; i++) {
+  //       let classnameNow = "fontLevel" + i;
+  //       if (content.classList.contains(classnameNow)) {
+  //         content.classList.remove(classnameNow);
+  //       }
+  //     }
+  //     const classnameTo = "fontLevel" + currentSize;
+  //     content.classList.add(classnameTo);
+
+  //     if (readerTp === "N") {
+  //       const isexpand = document.getElementsByClassName(
+  //         "readerControls_fontSize"
+  //       );
+
+  //       if (!isexpand[0].classList.contains("expand")) {
+  //         isexpand[0].click();
+  //       } else {
+  //         let rect = slider[0].getBoundingClientRect();
+  //         const move = (currentSize - ariaValueNow) * 20;
+  //         simulateDrag(slider[0], rect.left, rect.left + move);
+  //       }
+  //     } else if (readerTp === "H") {
+  //       const isexpand = document.getElementsByClassName(
+  //         "readerControls_fontSize"
+  //       );
+
+  //       if (isexpand[0]) {
+  //         if (!isexpand[0].classList.contains("expand")) {
+  //           isexpand[0].click();
+  //         } else {
+  //           let rect = slider[0].getBoundingClientRect();
+  //           const move = (currentSize - ariaValueNow) * 20;
+  //           simulateDrag(slider[0], rect.left, rect.left + move);
+  //         }
+  //       }
+  //     }
+  //   }
+  // });
+
+  //fontSize
+  
   chrome.runtime.onMessage.addListener(function (message) {
-    if (message.fontSize) {
-      const currentSize = message.fontSize;
-      const slider = document.getElementsByClassName("vue-slider-dot-handle");
-      let dotFonts = document.querySelector("div[role='slider']");
-      const ariaValueNow = parseInt(dotFonts.getAttribute("aria-valuenow"), 10);
-      const content = document.querySelector(".readerChapterContent");
-
-      for (let i = 0; i < 8; i++) {
-        let classnameNow = "fontLevel" + i;
-        if (content.classList.contains(classnameNow)) {
-          content.classList.remove(classnameNow);
-        }
-      }
-      const classnameTo = "fontLevel" + currentSize;
-      content.classList.add(classnameTo);
-
-      if (readerTp === "N") {
-        const isexpand = document.getElementsByClassName(
-          "readerControls_fontSize"
-        );
-
-        if (!isexpand[0].classList.contains("expand")) {
-          isexpand[0].click();
-        } else {
-          let rect = slider[0].getBoundingClientRect();
-          const move = (currentSize - ariaValueNow) * 20;
-          simulateDrag(slider[0], rect.left, rect.left + move);
-        }
-      } else if (readerTp === "H") {
-        const isexpand = document.getElementsByClassName(
-          "readerControls_fontSize"
-        );
-
-        if (isexpand[0]) {
-          if (!isexpand[0].classList.contains("expand")) {
-            isexpand[0].click();
-          } else {
-            let rect = slider[0].getBoundingClientRect();
-            const move = (currentSize - ariaValueNow) * 20;
-            simulateDrag(slider[0], rect.left, rect.left + move);
-          }
-        }
-      }
+    if (message.fontSize){
+      const FontSizeLevel = parseInt(message.fontSize)
+      updateFontSizeLevel(FontSizeLevel)
+      // console.log(FontSizeLevel);
+      window.location.reload();
     }
-  });
+  })
+
+function updateFontSizeLevel(newFontSizeLevel) {
+  let wrLocalSetting = localStorage.getItem("wrLocalSetting");
+  if (wrLocalSetting) {
+    wrLocalSetting = JSON.parse(wrLocalSetting);
+    wrLocalSetting.fontSizeLevel = newFontSizeLevel;
+    const updatedWrLocalSetting = JSON.stringify(wrLocalSetting);
+    localStorage.setItem("wrLocalSetting", updatedWrLocalSetting);
+  } else {
+    const newWrLocalSetting = JSON.stringify({
+      fontSizeLevel: newFontSizeLevel,
+      underlineStyle: 1,
+      fontFamily: "wr_default_font"
+    });
+    localStorage.setItem("wrLocalSetting", newWrLocalSetting);
+  }
+}
+
 
   function injectTopbarCss(value) {
     const style = document.createElement("style");
@@ -433,8 +482,8 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
           topbar.style.opacity = "1";
         }
+        activeSetting();
       }
-      activeSetting();
     });
   }
 
