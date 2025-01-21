@@ -580,7 +580,7 @@ function updateFontSizeLevel(newFontSizeLevel) {
   if (readerTp === "N") {
     window.addEventListener("load", (event) => {
       chrome.storage.local.get(["weread-autospeed"]).then((res) => {
-        const value = res["weread-autospeed"];
+        const value = res["weread-autospeed"] !== undefined ? res["weread-autospeed"] : 0;
         if (value != 0) {
           autoScroll(speeds[value]);
         } else {
