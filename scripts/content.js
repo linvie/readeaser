@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .wr_whiteTheme .reader-font-control-panel-wrapper .font-panel-content-fonts .font-panel-content-fonts-item,
          .wr_whiteTheme .reader-font-control-panel-wrapper .font-panel-content-fonts .font-panel-content-fonts-item.selected,        
         .wr_whiteTheme .reader_font_control_slider_wrapper,
-        .wr_horizontalReader .readerChapterContent.fontLevel2,
+        .wr_whiteTheme .wr_horizontalReader .readerChapterContent,
         .wr_whiteTheme .readerControls_item {background-color: ${color} ;}
         .readerChapterContent {color: ${fontColor} !important;}
         `;
@@ -493,7 +493,7 @@ function updateFontSizeLevel(newFontSizeLevel) {
     if (readerTp === "N" || readerTp === "P") {
       const readerTopBar = document.querySelector(".readerTopBar");
       const readerContent = document.querySelector(
-        ".readerContent .app_content"
+        ".wr_whiteTheme .readerContent .app_content"
       );
       readerContent.style.maxWidth = value + "vw";
       readerTopBar.style.maxWidth = value + "vw";
