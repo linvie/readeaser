@@ -62,6 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .wr_whiteTheme .readerTopBar,
         .wr_whiteTheme .readerCatalog,
         .wr_whiteTheme .readerNotePanel,
+        .wr_whiteTheme .readerContent .app_content,
         .wr_whiteTheme .reader-font-control-panel-wrapper .font-panel-content-fonts .font-panel-content-fonts-item,
          .wr_whiteTheme .reader-font-control-panel-wrapper .font-panel-content-fonts .font-panel-content-fonts-item.selected,        
         .wr_whiteTheme .reader_font_control_slider_wrapper,
@@ -114,6 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .wr_whiteTheme .reader-font-control-panel-wrapper .font-panel-content-fonts .font-panel-content-fonts-item,
          .wr_whiteTheme .reader-font-control-panel-wrapper .font-panel-content-fonts .font-panel-content-fonts-item.selected,        
         .wr_whiteTheme .reader_font_control_slider_wrapper,
+        .wr_horizontalReader .readerChapterContent.fontLevel2,
         .wr_whiteTheme .readerControls_item {background-color: ${color} ;}
         .readerChapterContent {color: ${fontColor} !important;}
         `;
