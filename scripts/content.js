@@ -484,7 +484,7 @@ function updateFontSizeLevel(newFontSizeLevel) {
         } else {
           topbar.style.opacity = "1";
         }
-        activeSetting();
+        // activeSetting();
       }
     });
   }
@@ -493,10 +493,10 @@ function updateFontSizeLevel(newFontSizeLevel) {
     if (readerTp === "N" || readerTp === "P") {
       const readerTopBar = document.querySelector(".readerTopBar");
       const readerContent = document.querySelector(
-        ".wr_whiteTheme .readerContent .app_content"
+        ".readerContent .app_content"
       );
-      readerContent.style.maxWidth = value + "vw";
-      readerTopBar.style.maxWidth = value + "vw";
+      readerContent.style.setProperty('max-width', value + "vw", 'important');
+      readerTopBar.style.setProperty('max-width', value + "vw", 'important');      
     } else {
       const style = document.createElement("style");
       style.id = "pagewidthSetting";
@@ -519,7 +519,8 @@ function updateFontSizeLevel(newFontSizeLevel) {
     if (tbs) {
       tbs.parentNode.removeChild(tbs);
     }
-    injectPageWidthCss(value);
+    setTimeout(() => { injectPageWidthCss(value); }, 1000);
+    // injectPageWidthCss(value);
   });
   chrome.runtime.onMessage.addListener((message) => {
     if (message.pageWidth) {
@@ -527,10 +528,12 @@ function updateFontSizeLevel(newFontSizeLevel) {
       if (tbs) {
         tbs.parentNode.removeChild(tbs);
       }
-      injectPageWidthCss(message.pageWidth);
-      activeSetting();
+      // injectPageWidthCss(message.pageWidth);
+      window.location.reload();
+      setTimeout(() => { injectPageWidthCss(value); }, 1000);
+
       if (readerTp === "N") {
-        window.location.reload();
+        // window.location.reload();
       }
     }
   });
