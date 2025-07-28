@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function () {
     'button[title="深色"], button[title="浅色"]'
   );
   if (whiteBlack) {
-    whiteBlack[0].style.display = "none";
+    // whiteBlack[0].style.display = "none";
   }
 
   chrome.storage.local.get(["weread-fontFamily"]).then((result) => {
@@ -378,6 +378,7 @@ function updateFontSizeLevel(newFontSizeLevel) {
   if (readerTy === "N" || readerTy === "P") {
     const topbar = document.querySelector(".readerTopBar");
     let readerControl = document.querySelector(".readerControls");
+    console.log("Reader control found:", readerControl);
     chrome.storage.local.get(["weread-topbar"]).then((res) => {
       const value = res["weread-topbar"];
       const tbs = document.getElementById("topbarSetting");
@@ -394,9 +395,11 @@ function updateFontSizeLevel(newFontSizeLevel) {
             window.pageYOffset || document.documentElement.scrollTop;
 
           if (scrollS > windowTop) {
-            readerControl.style.opacity = "0";
+            readerControl = document.querySelector(".readerControls");
+
+            if (readerControl) readerControl.style.opacity = "0";
           } else {
-            readerControl.style.opacity = "1";
+            if (readerControl) readerControl.style.opacity = "1";
           }
           windowTop = scrollS;
         });
@@ -407,10 +410,10 @@ function updateFontSizeLevel(newFontSizeLevel) {
             window.pageYOffset || document.documentElement.scrollTop;
           if (scrollS > windowTop) {
             topbar.style.opacity = "0";
-            readerControl.style.opacity = "0";
+            if (readerControl) readerControl.style.opacity = "0";
           } else {
             topbar.style.opacity = "1";
-            readerControl.style.opacity = "1";
+            if (readerControl) readerControl.style.opacity = "1";
           }
           windowTop = scrollS;
         });
